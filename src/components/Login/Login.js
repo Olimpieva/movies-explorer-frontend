@@ -12,8 +12,8 @@ function Login() {
             <Logo />
             <h1 className="login__title">Рады видеть!</h1>
             <form className="login__form">
-                <InputField formName="login" name="email" title="E-mail" />
-                <InputField formName="login" name="password" title="Пароль" />
+                <InputField formName="login" name="email" title="E-mail" type="email" />
+                <InputField formName="login" name="password" title="Пароль" type="password" />
                 <button className="login__button login__button_action_save" type="submit">Войти</button>
             </form>
             <span className="login__link-caption">Ещё не зарегистрированы?

@@ -1,8 +1,10 @@
 import React from "react";
 
+import './SectionTitle.css'
+
 function SectionTitle({ titleText }) {
     return (
-        <h2 className="section__title">{titleText}</h2>
+        <h2 className="section-title">{titleText}</h2>
     );
 };
 

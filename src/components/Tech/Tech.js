@@ -2,6 +2,8 @@ import React from "react";
 
 import SectionTitle from "../SectionTitle/sectionTitle";
 
+import './Tech.css';
+
 function Tech() {
     return (
         <section className="tech">
