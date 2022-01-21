@@ -1,18 +1,25 @@
 .about-project {
-    padding: 110px 70px;
+    padding: 70px 18px;
 }
 
 .about-project__description {
-    margin: 70px 0 110px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 40px;
+    margin: 60px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.about-project__point {
+    margin-bottom: 56px;
+}
+
+.about-project__point:last-of-type {
+    margin-bottom: 0;
 }
 
 .about-project__description-title {
-    margin: 0 0 26px;
+    margin: 0 0 16px;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1.21;
     letter-spacing: -0.04em;
 }
@@ -20,23 +27,23 @@
 .about-project__description-text {
     margin: 0;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 1.43;
+    font-size: 11px;
+    line-height: 1.45;
 }
 
 .about-project__timeline {
     display: grid;
-    grid-template-columns: 1fr 4fr;
-    row-gap: 14px;
+    grid-template-columns: 1fr 1.84fr;
+    row-gap: 10px;
 }
 
 .about-project__timeline-duration {
     margin: 0;
-    padding: 9px 14px;
+    padding: 11px 10px;
     background: #303030;
     text-align: center;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 11px;
     line-height: 1.21;
 }
 
@@ -48,60 +55,12 @@
 .about-project__timeline-name {
     margin: 0;
     justify-self: center;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 1.21;
-    color: #8B8B8B;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 1.16;
+    color:#A0A0A0;
 }
 
-@media screen and (min-width: 320px) {
-    
-    .about-project {
-        padding: 70px 18px;
-    }
-
-    .about-project__description {
-        margin: 60px 0;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .about-project__point {
-        margin-bottom: 56px;
-    }
-
-    .about-project__point:last-of-type {
-        margin-bottom: 0;
-    }
-    .about-project__description-title {
-        margin: 0 0 16px;
-        font-size: 18px;
-    }
-
-    .about-project__description-text {
-        font-size: 11px;
-        line-height: 1.45;
-    }
-
-    .about-project__timeline {
-        display: grid;
-        grid-template-columns: 1fr 1.84fr;
-        row-gap: 10px;
-    }
-
-    .about-project__timeline-duration {
-        margin: 0;
-        padding: 11px 10px;
-        font-size: 11px;
-    }
-    
-    .about-project__timeline-name {
-        font-weight: 400;
-        font-size: 11px;
-        line-height: 1.16;
-        color:#A0A0A0;
-    }
-  }
 
 @media screen and (min-width: 768px) {
 
@@ -110,7 +69,7 @@
     }
     
     .about-project__description {
-        margin: 70px 0 90px;
+        margin: 70px 0 93px;
         display: grid;
         grid-template-columns: 1fr 1fr;
         column-gap: 30px;
@@ -124,35 +83,24 @@
         margin: 0 0 22px;
         font-size: 20px;
         line-height: 1.21;
-        letter-spacing: -0.04em;
     }
 
     .about-project__description-text {
-        margin: 0;
         font-size: 12px;
         line-height: 1.5;
     }
 
-
     .about-project__timeline {
-        grid-template-columns: minmax(140px, 0.25fr) 1fr;
+        grid-template-columns: minmax(140px, 1fr) 4fr;
         row-gap: 14px;
     }
 
     .about-project__timeline-duration {
-        margin: 0;
-        padding: 9px 10px;
-        background: #303030;
-        text-align: center;
-        font-weight: 400;
+        padding: 9px 0;
         font-size: 14px;
-        line-height: 1.21;
     }
 
     .about-project__timeline-name {
-        margin: 0;
-        justify-self: center;
-        font-weight: 400;
         font-size: 14px;
         line-height: 1.21;
     }
@@ -164,43 +112,23 @@
         padding: 110px 70px;
     }
 
+    .about-project__description {
+        margin-bottom: 110px;
+        column-gap: 40px;
+    }
+
     .about-project__description-title {
         margin: 0 0 26px;
-        font-weight: 400;
-        font-size: 20px;
-        line-height: 1.21;
-        letter-spacing: -0.04em;
     }
 
     .about-project__description-text {
-        margin: 0;
-        font-weight: 400;
         font-size: 14px;
         line-height: 1.43;
     }
 
-    .about-project__timeline {
-        display: grid;
-        grid-template-columns: 1fr 4fr;
-        row-gap: 14px;
-    }
-
-    .about-project__timeline-duration {
-        margin: 0;
-        padding: 9px 14px;
-        background: #303030;
-        text-align: center;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 1.21;
-    }
-
     .about-project__timeline-name {
-        margin: 0;
-        justify-self: center;
         font-weight: 500;
-        font-size: 14px;
-        line-height: 1.21;
         color: #8B8B8B;
     }
+    
 }
