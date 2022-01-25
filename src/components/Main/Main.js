@@ -10,6 +10,7 @@ import Logo from "../Logo/Logo";
 
 import './Main.css';
 
+
 function Main() {
     console.log("MAIN PAGE")
     return (

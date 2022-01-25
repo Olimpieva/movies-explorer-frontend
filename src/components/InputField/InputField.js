@@ -1,14 +1,17 @@
 import React from "react";
-import InputError from "../InputError/InputError";
+
+import FormError from "../FormError/FormError";
+
+import './InputField.css';
 
 function InputField(props) {
     const { formName, name, title, type } = props;
 
     return (
-        <fieldset className="input-field__fieldset">
+        <fieldset className={`input-field ${formName}__input-field`}>
             <label htmlFor={`${formName}-${name}`} className="input-field__caption">{title}</label>
             <input className="input-field__input" id={`${formName}-${name}`} name={name} type={type} />
-            <InputError isHidden={true} name={name} message="" />
+            <FormError isHidden={true} name={name} type="input" message="" />
         </fieldset>
     )
 }

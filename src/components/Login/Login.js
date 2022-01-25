@@ -1,21 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import Auth from "../Auth/Auth";
 import InputField from "../InputField/InputField";
-import Logo from "../Logo/Logo";
+
+import './Login.css';
 
 function Login() {
     console.log('LOGIN')
 
     return (
         <main className="login">
-            <Logo />
-            <h1 className="login__title">Рады видеть!</h1>
-            <form className="login__form">
+            <Auth name="login" title="Рады видеть!" buttonText="Войти">
                 <InputField formName="login" name="email" title="E-mail" type="email" />
                 <InputField formName="login" name="password" title="Пароль" type="password" />
-                <button className="login__button login__button_action_save" type="submit">Войти</button>
-            </form>
+            </Auth>
             <span className="login__link-caption">Ещё не зарегистрированы?
                 <Link className="login__link" to="/signup"> Регистрация</Link>
             </span>

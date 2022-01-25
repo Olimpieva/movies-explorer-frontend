@@ -89,6 +89,14 @@
 
     .footer__menu-item {
         margin-bottom: 0;
+        transition: opacity 0.3s ease-out;
+        -webkit-transition: opacity 0.3s ease-out;
+        -moz-transition: opacity 0.3s ease-out;
+        -ms-transition: opacity 0.3s ease-out;
+        -o-transition: opacity 0.3s ease-out;
     }
 
+    .footer__menu-item:hover {
+        opacity: 0.8;
+    }
 }

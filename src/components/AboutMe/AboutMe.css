@@ -45,6 +45,15 @@
     font-size: 14px;
     line-height: 1.21;
     color: #FFF;
+    transition: opacity 0.3s ease-out;
+    -webkit-transition: opacity 0.3s ease-out;
+    -moz-transition: opacity 0.3s ease-out;
+    -ms-transition: opacity 0.3s ease-out;
+    -o-transition: opacity 0.3s ease-out;
+}
+
+.about-me__link:hover {
+    opacity: 0.8;
 }
 
 .about-me__link:last-of-type {
@@ -92,7 +101,7 @@
     .about-me__link {
         margin-right: 20px; 
     }
-    
+
   }
 
 @media screen and (min-width: 1280px) {

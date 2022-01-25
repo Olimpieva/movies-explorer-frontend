@@ -36,6 +36,15 @@
 
 .portfolio__item-link {
     margin: 0 0 0 auto;
+    transition: opacity 0.3s ease-out;
+    -webkit-transition: opacity 0.3s ease-out;
+    -moz-transition: opacity 0.3s ease-out;
+    -ms-transition: opacity 0.3s ease-out;
+    -o-transition: opacity 0.3s ease-out;
+}
+
+.portfolio__item-link:hover {
+    opacity: 0.8;
 }
 
 @media screen and (min-width: 768px) {

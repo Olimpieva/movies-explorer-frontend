@@ -8,4 +8,13 @@
     font-size: 12px;
     line-height: 1.33;
     color: #FFF;
+    transition: opacity 0.3s ease-out;
+    -webkit-transition: opacity 0.3s ease-out;
+    -moz-transition: opacity 0.3s ease-out;
+    -ms-transition: opacity 0.3s ease-out;
+    -o-transition: opacity 0.3s ease-out;
+}
+
+.nav-tab__link:hover {
+    opacity: 0.8;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import InputError from "../InputError/InputError";
+import FormError from "../FormError/FormError";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 
 function SearchForm() {
@@ -8,7 +8,7 @@ function SearchForm() {
             <form className="search__form">
                 <fieldset>
                     <input className="search__input" id="search-movie" name="movie-title"></input>
-                    <InputError formName="search" name="movie" message="" />
+                    <FormError formName="search" name="movie" type="input" message="" />
                 </fieldset>
                 <button className="search__button"></button>
             </form>
