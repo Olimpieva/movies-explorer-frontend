@@ -8,6 +8,7 @@
     text-decoration: none;
     background-color: #202020;
     font-family: 'Inter', 'Arial', sans-serif;
+    font-weight: 400;
     color: #FFF;
     text-rendering: optimizeLegibility;
     -moz-osx-font-smoothing: grayscale;

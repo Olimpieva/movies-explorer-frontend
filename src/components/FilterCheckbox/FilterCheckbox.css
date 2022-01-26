@@ -1,0 +1,51 @@
+.filter {
+    display: flex;
+    justify-content: center;
+  }
+
+  .filter__checkbox {
+      display: none;
+  }
+  
+  .filter__label {
+    width: 36px;
+    height: 20px;
+    margin-right: 13px;
+    display: inline-block;
+    position: relative;
+    background: #343434;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.5s ease-out;
+  }
+  
+  .filter__label::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    background: #A0A0A0;
+    border-radius: 50%;
+    transition: all 0.5s ease-out;
+  }
+  
+  .filter__checkbox:checked+.filter__label {
+    background: #3DDC84;
+  }
+  
+  .filter__checkbox:checked+.filter__label::before {
+    left: 18px;
+    background: #FFF;
+  }
+  
+  .filter__text {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.64;
+    color: #FFF;
+  }
+
+  

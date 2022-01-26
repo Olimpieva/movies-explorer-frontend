@@ -1,8 +1,10 @@
 import React from "react";
 
+import './FilterCheckbox.css'
+
 function FilterCheckbox({ name, checkboxText }) {
     return (
-        <div className="filter">
+        <div className="filter search__filter">
             <input
                 type="checkbox"
                 id={`${name}-checkbox`}

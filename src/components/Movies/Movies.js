@@ -6,13 +6,17 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Footer from "../Footer/Footer";
 import More from "../More/More";
 
-function Movies() {
+import './Movies.css';
+
+function Movies({ movies }) {
+    console.log('MOVIES')
+
     return (
         <div className="movies-page">
             <Header />
             <main className="movies movies-page__movies">
                 <SearchForm />
-                <MoviesCardList movies={[1, 2, 3]} />
+                <MoviesCardList movies={movies} />
                 <More isVisible={true} />
             </main>
             <Footer />
