@@ -7,15 +7,11 @@ import './MoviesCard.css';
 function MoviesCard(props) {
     const { movie, location } = props;
 
-
-
     const savedMovies = useContext(CurrentSavedCardsContext);
     const isLiked = savedMovies.some((savedMovie) => savedMovie.movieId === movie.id);
     const imageLink = location === '/movies' ? 'https://api.nomoreparties.co' + movie.image.url : movie.image;
     const trailerLink = location === '/movies' ? movie.trailerLink : movie.trailer;
     const duration = `${Math.trunc(movie.duration / 60)}ч ${movie.duration % 60}м`;
-
-
 
     return (
         <li className="movies-card">

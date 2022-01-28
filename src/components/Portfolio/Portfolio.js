@@ -1,6 +1,6 @@
 import React from "react";
 
-import pointerIcon from "../../images/pointer.svg";
+import pointerIcon from "../../images/pointer-icon.svg";
 
 import './Portfolio.css';
 

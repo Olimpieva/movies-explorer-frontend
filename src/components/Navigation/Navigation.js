@@ -5,22 +5,21 @@ import './Navigation.css';
 
 function Navigation() {
     return (
-        <nav className="navigation">
-            <ul className="navigation__list">
-                <li className="navigation__item">
-                    <NavLink to="/movies" className="navigation__link">Фильмы</NavLink>
+        <nav className="nav">
+            <ul className="nav__list">
+                <li className="nav__item">
+                    <NavLink to="/movies" className={({ isActive }) => `nav__link ${isActive && 'nav__link_active'}`} >Фильмы</NavLink>
                 </li>
-                <li className="navigation__item">
-                    <NavLink to="/saved-movies" className="navigation__link">Сохранённые фильмы</NavLink>
+                <li className="nav__item">
+                    <NavLink to="/saved-movies" className={({ isActive }) => `nav__link ${isActive && 'nav__link_active'}`} >Сохранённые фильмы</NavLink>
                 </li>
-                <li className="navigation__item navigation__item_profile">
-                    <NavLink to="/profile" className="navigation__link navigation__link_profile">
+                <li className="nav__item nav__item_profile">
+                    <NavLink to="/profile" className={({ isActive }) => `nav__link nav__link_profile ${isActive && 'nav__link_active'}`}>
                         Аккаунт
-                        <span className="navigation__profile-icon"></span>
+                        <span className="nav__profile-icon"></span>
                     </NavLink>
                 </li>
             </ul>
-
         </nav>
     );
 };
