@@ -7,7 +7,6 @@ import Navigation from "../Navigation/Navigation";
 import './Header.css';
 
 function Header() {
-    console.log('HEADER')
 
     const [isMenuOpened, setIsMenuOpened] = useState(false);
 

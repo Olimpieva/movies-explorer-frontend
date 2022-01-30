@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import './DropDownNavigation.css';
 
 function DropDownNavigation({ isOpened, onClose }) {
-    console.log(isOpened)
+
     return (
         <div className={`nav-wrapper ${isOpened && 'nav-wrapper_opened'}`}>
             <nav className={`drop-down-nav ${isOpened && 'drop-down-nav_opened'}`}>

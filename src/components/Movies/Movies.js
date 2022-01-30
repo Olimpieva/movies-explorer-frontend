@@ -9,7 +9,6 @@ import More from "../More/More";
 import './Movies.css';
 
 function Movies({ movies }) {
-    console.log('MOVIES')
 
     return (
         <div className="movies-page">

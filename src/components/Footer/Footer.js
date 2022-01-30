@@ -18,12 +18,11 @@ function Footer() {
                             rel="noopener noreferrer">Github</a>
                     </li>
                     <li className="footer__menu-item">
-                        <a href="http://telegram.com/" className="footer__link" target="_blank"
+                        <a href="https://telegram.org/" className="footer__link" target="_blank"
                             rel="noopener noreferrer">Telegram</a>
                     </li>
                 </ul>
             </div>
-
         </footer>
     );
 };

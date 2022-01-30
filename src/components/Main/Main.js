@@ -9,17 +9,24 @@ import Footer from "../Footer/Footer";
 import Logo from "../Logo/Logo";
 
 import './Main.css';
+import Header from "../Header/Header";
 
 
 function Main() {
-    console.log("MAIN PAGE")
+
+    const isAuthorized = false;
+
     return (
         <div className="main-page">
-            <header className="main-page__header">
-                <Logo />
-                <NavLink className="main-page__link main-page__link_type_register" to="/signup"> Регистрация </NavLink>
-                <NavLink className="main-page__link main-page__link_type_login" to="/signin"> Войти </NavLink>
-            </header>
+            {isAuthorized ?
+                <Header />
+                :
+                <header className="main-page__header">
+                    <Logo />
+                    <NavLink className="main-page__link main-page__link_type_register" to="/signup"> Регистрация </NavLink>
+                    <NavLink className="main-page__link main-page__link_type_login" to="/signin"> Войти </NavLink>
+                </header>
+            }
             <main className="main">
                 <Promo />
                 <AboutProject />

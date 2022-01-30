@@ -1,11 +1,12 @@
-
+.main-page {
+    background: #073042;
+}
 .main-page__header {
     min-height: 74px;
     padding: 0 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #073042;
 }
 
 .main-page__link {
@@ -50,5 +51,12 @@
         margin-right: 30px;
     }
     
-  }
+}
 
+  @media screen and (min-width: 1280px) {
+    
+    .main-page__header {
+      padding: 0 70px;
+    }
+    
+}

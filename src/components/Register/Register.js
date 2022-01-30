@@ -7,7 +7,6 @@ import InputField from "../InputField/InputField";
 import './Register.css';
 
 function Register() {
-    console.log('REGISTER')
 
     return (
         <main className="register">

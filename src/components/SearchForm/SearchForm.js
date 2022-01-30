@@ -1,10 +1,12 @@
 import React from "react";
+
 import FormError from "../FormError/FormError";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 
 import './SearchForm.css';
 
 function SearchForm() {
+
     return (
         <section className="search">
             <form className="search__form">

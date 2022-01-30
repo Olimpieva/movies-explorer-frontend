@@ -7,7 +7,6 @@ import './Auth.css';
 
 function Auth(props) {
     const { name, title, buttonText } = props;
-    console.log('AUTH');
 
     return (
         <div className="auth">
@@ -19,9 +18,7 @@ function Auth(props) {
                 <button className="auth__button" type="submit">{buttonText}</button>
             </form>
         </div>
-
     )
-
 }
 
 export default Auth;

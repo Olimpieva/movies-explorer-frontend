@@ -7,7 +7,6 @@ import InputField from "../InputField/InputField";
 import './Login.css';
 
 function Login() {
-    console.log('LOGIN')
 
     return (
         <main className="login">

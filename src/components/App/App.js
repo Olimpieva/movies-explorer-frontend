@@ -16,7 +16,6 @@ import './App.css';
 import { movies, savedMovies, user } from '../../fixtures';
 
 function App() {
-  console.log("APP")
 
   return (
     <CurrentUserContext.Provider value={user || {}}>
