@@ -5,9 +5,10 @@ import Header from "../Header/Header";
 import FormError from "../FormError/FormError";
 
 import './Profile.css';
+import SubmitButton from "../SubmitButton/SubmitButton";
 
 function Profile() {
-    const [isEditingEnabled, setIsEditingEnabled] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('')
     const user = useContext(CurrentUserContext);
@@ -17,9 +18,6 @@ function Profile() {
         setEmail(user.email);
     }, [user])
 
-    // function onChange() {
-    //     setIsEditingEnabled(true);
-    // }
 
 
     return (
@@ -29,10 +27,12 @@ function Profile() {
                 <section className="profile">
                     <h1 className="profile__greetings">Привет, {user.name}!</h1>
 
-                    <form className="profile__form" >
+                    <form className="profile__form">
                         <fieldset className="profile__fieldset">
                             <label htmlFor="profile-name" className="profile__label">Имя</label>
-                            <input type="text" id="profile-name" name="profile-name" className="profile__input" value={name || ''} readOnly={!isEditingEnabled} onChange={() => console.log('Da')} />
+                            <input type="text" id="profile-name" name="profile-name" className="profile__input" disabled={!isEdit} value={name || ''} onChange={(event) => {
+                                setName(event.target.value);
+                            }} />
                             <FormError isHidden={true} name="email" type="input" message="" />
                         </fieldset>
 
@@ -40,20 +40,25 @@ function Profile() {
 
                         <fieldset className="profile__fieldset">
                             <label htmlFor="profile-email" className="profile__label">E-mail</label>
-                            <input type="email" id="profile-email" name="profile-email" className="profile__input" value={email || ''} readOnly={!isEditingEnabled} onChange={() => console.log('Da')} />
+                            <input type="email" id="profile-email" name="profile-email" className="profile__input" disabled={!isEdit} value={email || ''} onChange={(event) => {
+                                setEmail(event.target.value)
+                            }} />
                             <FormError isHidden={true} name="email" type="input" message="" />
                         </fieldset>
 
-                        <FormError isHidden={true} name="submit-profile" type="button" message="" />
-                        {isEditingEnabled ?
-                            <button type="submit" className="profile__button profile__button_type_submit">Сохранить</button>
-                            :
-                            <button type="submit" className="profile__button profile__button_type_submit" onClick={() => console.log('da')}>Редактировать</button>
-                        }
-
+                        <div className="profile__buttons-container">
+                            {isEdit ? <>
+                                <FormError isHidden={true} name="submit-profile" type="button" message="" />
+                                <SubmitButton text="Сохранить" />
+                            </> : <>
+                                <button type="button" className="profile__button profile__button_type_submit" onClick={(e) => {
+                                    e.preventDefault();
+                                    setIsEdit(true)
+                                }}>Редактировать</button>
+                                <button type="reset" className="profile__button profile__button_type_logout">Выйти из аккаунта</button>
+                            </>}
+                        </div>
                     </form>
-
-                    <button type="reset" className="profile__button profile__button_type_logout">Выйти из аккаунта</button>
                 </section>
             </main>
         </div>

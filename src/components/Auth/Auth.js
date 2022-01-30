@@ -2,6 +2,7 @@ import React from "react";
 
 import FormError from "../FormError/FormError";
 import Logo from "../Logo/Logo";
+import SubmitButton from "../SubmitButton/SubmitButton";
 
 import './Auth.css';
 
@@ -15,7 +16,7 @@ function Auth(props) {
             <form className={`auth__form auth__form-${name}`} name={`auth-${name}`}>
                 {props.children}
                 <FormError isHidden={true} name={`submit-${name}`} type="button" message="" />
-                <button className="auth__button" type="submit">{buttonText}</button>
+                <SubmitButton text={buttonText} />
             </form>
         </div>
     )
