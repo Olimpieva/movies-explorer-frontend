@@ -10,7 +10,7 @@ function SearchForm() {
     return (
         <section className="search">
             <form className="search__form">
-                <input className="search__input" id="search-movie" name="movie-title" placeholder="Фильм"></input>
+                <input className="search__input" id="search-movie" name="movie-title" placeholder="Фильм" required></input>
                 <FormError formName="search" name="movie" type="input" message="" />
                 <button className="search__button"></button>
             </form>

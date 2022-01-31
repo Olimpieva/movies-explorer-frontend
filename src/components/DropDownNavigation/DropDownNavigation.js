@@ -19,9 +19,9 @@ function DropDownNavigation({ isOpened, onClose }) {
                         <NavLink to="/saved-movies" className={({ isActive }) => `drop-down-nav__link ${isActive && 'drop-down-nav__link_active'}`}>Сохранённые фильмы</NavLink>
                     </li>
                     <li className="drop-down-nav__item drop-down-nav__item_profile">
-                        <NavLink to="/profile" className={({ isActive }) => `nav__link nav__link_profile ${isActive && 'drop-down-nav__link_active'}`}>
+                        <NavLink to="/profile" className={({ isActive }) => `drop-down-nav__link drop-down-nav__link_profile ${isActive && 'drop-down-nav__link_active'}`}>
                             Аккаунт
-                            <span className="nav__profile-icon"></span>
+                            <span className="drop-down-nav__profile-icon"></span>
                         </NavLink>
                     </li>
                 </ul>

@@ -23,7 +23,7 @@ function Portfolio() {
                 <li className="portfolio__item">Адаптивный сайт
                     <a
                         className="portfolio__item-link"
-                        href="https://Olimpieva.github.io/russian-travel/index.html"
+                        href="https://github.com/Olimpieva/russian-travel"
                         target="_blank"
                         rel="noreferrer"
                     >
@@ -34,7 +34,7 @@ function Portfolio() {
                 <li className="portfolio__item">Одностраничное приложение
                     <a
                         className="portfolio__item-link"
-                        href="https://mesto-project.nomoredomains.rocks/sign-in"
+                        href="https://github.com/Olimpieva/react-mesto-api-full"
                         target="_blank"
                         rel="noreferrer"
                     >

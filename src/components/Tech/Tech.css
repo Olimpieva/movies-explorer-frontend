@@ -4,7 +4,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #272727;
+    background: #202020;
 }
 
 .tech__subtitle {
@@ -53,6 +53,7 @@
 
     .tech {
         padding: 90px 50px;
+        background: #272727;
     }
 
     .tech__subtitle {
