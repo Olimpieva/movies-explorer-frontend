@@ -37,7 +37,7 @@
     gap: 10px;
 }
 
-.techs__item {
+.tech__item {
     margin: 0;
     padding: 21px 0;
     background: #303030;
@@ -76,14 +76,14 @@
 
     }
 
-    .techs__item {
+    .tech__item {
         margin-right: 10px;
         padding: 21px 0;
         flex: 1;
         font-size: 14px;
     }
 
-    .techs__item:last-of-type {
+    .tech__item:last-of-type {
         margin-right: 0;
     }
 
@@ -109,7 +109,7 @@
         min-width: 690px;
     }
 
-    .techs__item {
+    .tech__item {
         padding: 21px 0 22px;
     }
 
