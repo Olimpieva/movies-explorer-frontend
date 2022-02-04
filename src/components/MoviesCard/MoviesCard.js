@@ -1,29 +1,29 @@
 import React, { useContext } from "react";
 
-import { CurrentSavedCardsContext } from '../../context/CurrentSavedCardsContext';
+import { CurrentSavedMoviesContext } from '../../context/CurrentSavedMoviesContext';
 
 import './MoviesCard.css';
 
 function MoviesCard(props) {
     const { movie, location, onMovieCardLike, onMovieCardRemove } = props;
 
-    const savedMovies = useContext(CurrentSavedCardsContext);
+    const savedMovies = useContext(CurrentSavedMoviesContext);
     const isLiked = savedMovies.some((savedMovie) => savedMovie.movieId === movie.id);
     const imageLink = location === '/movies' ? 'https://api.nomoreparties.co' + movie.image.url : movie.image;
     const thumbnailLink = location === '/movies' ? 'https://api.nomoreparties.co' + movie.image.formats.thumbnail.url : movie.thumbnail;
-    const trailerLink = location === '/movies' ? movie.trailerLink : movie.trailer;
+    const trailerLink = movie.trailerLink || movie.trailer;
     const duration = `${Math.trunc(movie.duration / 60)}ч ${movie.duration % 60}м`;
 
     function handleMovieCardLike() {
         onMovieCardLike({
             movieId: movie.id,
             nameRU: movie.nameRU,
-            nameEN: movie.nameEN,
+            nameEN: movie.nameEN || 'Неизвестно',
             description: movie.description,
             duration: movie.duration,
             year: movie.year,
-            country: movie.country,
-            director: movie.director,
+            country: movie.country || 'Неизвестно',
+            director: movie.director || 'Неизвестно',
             image: imageLink,
             trailer: trailerLink,
             thumbnail: thumbnailLink,

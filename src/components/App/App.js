@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 
 import { CurrentUserContext } from '../../context/CurrentUserContext';
-import { CurrentSavedCardsContext } from '../../context/CurrentSavedCardsContext';
+import { CurrentSavedMoviesContext } from '../../context/CurrentSavedMoviesContext';
 import Main from "../Main/Main";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
@@ -14,6 +14,7 @@ import NotFound from "../NotFound/NotFound";
 import './App.css';
 
 import mainApi from "../../utils/MainApi";
+import moviesApi from "../../utils/MoviesApi";
 
 // import { movies, savedMovies } from '../../fixtures';
 
@@ -23,18 +24,28 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
+  const [allMovies, setAllMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
+  const [selectedMovies, setSelectedMovies] = useState([]);
 
-  useEffect(() => {
-    getSavedMovies()
-  }, [])
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  async function getAllMovies() {
+    try {
+      const movies = await moviesApi.getMovies();
+      setAllMovies(movies);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async function getSavedMovies() {
     let movies;
 
     try {
       movies = await mainApi.getSavedMovies();
-      console.log(movies);
+      console.log({ 'SavedMovies': movies });
     } catch (error) {
       return console.log(error);
     }
@@ -42,32 +53,29 @@ function App() {
     setSavedMovies(movies);
   }
 
-  const navigate = useNavigate();
-
   async function checkUserValidity() {
     let user;
-    console.log({ loggedIn })
-
 
     try {
       user = await mainApi.checkToken();
-      console.log(user)
       if (!user) {
         throw new Error(`Произошла ошибка авторизации`)
       }
-      console.log({ user })
     } catch (error) {
       return console.log(error);
     }
 
     setLoggedIn(true);
     setCurrentUser(user);
-    navigate('/');
+    getSavedMovies();
+    getAllMovies();
+    navigate('/movies');
   }
 
   useEffect(() => {
+    console.log('Ya tut')
     checkUserValidity();
-  }, []);
+  }, [])
 
   async function handleRegister(userData) {
     try {
@@ -76,19 +84,17 @@ function App() {
       console.log(error);
     }
 
-    navigate('/signin');
+    handleLogin(userData);
   }
 
   async function handleLogin(userData) {
     try {
-
-      const response = await mainApi.login(userData);
-      console.log({ response })
+      await mainApi.login(userData);
     } catch (error) {
       console.log(error)
     }
 
-    // checkUserValidity();
+    checkUserValidity();
   }
 
   async function handleLogout() {
@@ -114,6 +120,22 @@ function App() {
 
     setCurrentUser(updatedUser);
   }
+  async function handleSearchMovies(keyword, checkboxes) {
+
+    if (!keyword) {
+
+    }
+
+    let movies = (location === '/movies' ? allMovies : savedMovies)
+      .filter(movie => movie.nameRU.toLowerCase().includes(keyword))
+
+    if (checkboxes["shortMovies-checkbox"]) {
+      movies = movies.filter((movie) => movie.duration <= 30)
+    }
+
+    setSelectedMovies(movies)
+  }
+
   async function handleSaveMovie(movie) {
     console.log({ movie })
     let savedMovie;
@@ -144,7 +166,7 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser || {}}>
-      <CurrentSavedCardsContext.Provider value={savedMovies || []}>
+      <CurrentSavedMoviesContext.Provider value={savedMovies || []}>
         <div className="app">
           <Routes>
             <Route exact path="/" element={<Main loggedIn={loggedIn} />} />
@@ -156,7 +178,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div >
-      </CurrentSavedCardsContext.Provider>
+      </CurrentSavedMoviesContext.Provider>
     </CurrentUserContext.Provider>
   );
 }

@@ -4,6 +4,7 @@ import './FormError.css'
 
 function FormError(props) {
     const { isHidden, name, type, message } = props;
+    console.log(message)
 
     return (
         <span

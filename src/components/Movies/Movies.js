@@ -20,7 +20,6 @@ function Movies({ onSaveMovie, onRemoveMovie }) {
         try {
             const movies = await moviesApi.getMovies();
             setAllMovies(movies);
-            console.log(movies)
         } catch (error) {
             console.log(error);
         }
@@ -30,14 +29,18 @@ function Movies({ onSaveMovie, onRemoveMovie }) {
         getAllMovies();
     }, [])
 
-    const onSearch = (keyword, onlyShortMovies) => {
-        console.log(keyword, onlyShortMovies)
+    const onSearch = (keyword, checkboxes) => {
 
-        let movies = allMovies.filter(movie => movie.nameRU.toLowerCase().includes(keyword));
+        console.log({ checkboxes })
 
-        if (onlyShortMovies) {
+        let movies = allMovies.filter(movie => movie.nameRU.toLowerCase().includes(keyword))
+        console.log({ movies })
+
+        if (checkboxes["shortMovies-checkbox"]) {
+            console.log('WHY I AM NOT HERE')
             movies = movies.filter((movie) => movie.duration <= 30)
         }
+        console.log({ movies })
 
         setFoundMovies(movies)
     }

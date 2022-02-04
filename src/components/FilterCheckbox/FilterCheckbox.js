@@ -10,8 +10,9 @@ function FilterCheckbox({ name, checkboxText, value, onChange }) {
                 type="checkbox"
                 id={`${name}-checkbox`}
                 className="filter__checkbox"
-                onChange={() => {
-                    onChange(!value)
+                onChange={(event) => {
+                    console.log(event)
+                    onChange(!value, event.target.id)
                 }}
                 value={value}
             />

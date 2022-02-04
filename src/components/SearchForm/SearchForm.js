@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import FormError from "../FormError/FormError";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
@@ -10,18 +10,21 @@ function SearchForm({ onSearchMovie }) {
     console.log('SEARCH FORM')
 
     const [keyword, setKeyword] = useState('');
-    const [isChecked, setIsChecked] = useState(false);
+    const [isChecked, setIsChecked] = useState({
+        "shortMovies-checkbox": false,
+    });
 
-    console.log({ isChecked })
+    useEffect(() => {
+        onSearchMovie(keyword, isChecked)
+    }, [isChecked])
 
     const onSearchButtonClick = (event) => {
         event.preventDefault()
         onSearchMovie(keyword, isChecked)
     }
 
-    const onFilterCheckboxClick = (nextCheckboxValue) => {
-        setIsChecked(nextCheckboxValue);
-        onSearchMovie(keyword, nextCheckboxValue)
+    const onFilterCheckboxClick = (nextCheckboxValue, checkboxId) => {
+        setIsChecked({ ...isChecked, [checkboxId]: nextCheckboxValue });
     }
 
     return (
@@ -40,7 +43,7 @@ function SearchForm({ onSearchMovie }) {
                 <FormError formName="search" name="movie" type="input" message="" />
                 <button className="search__button" onClick={onSearchButtonClick}></button>
             </form>
-            <FilterCheckbox name="short" checkboxText="Короткометражки" value={isChecked} onChange={onFilterCheckboxClick} />
+            <FilterCheckbox name="shortMovies" checkboxText="Короткометражки" value={isChecked["shortMovies-checkbox"]} onChange={onFilterCheckboxClick} />
         </section>
     );
 };

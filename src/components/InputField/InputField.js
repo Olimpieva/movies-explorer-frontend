@@ -1,11 +1,12 @@
 import React from "react";
 
 import FormError from "../FormError/FormError";
+import Register from "../Register/Register";
 
 import './InputField.css';
 
 function InputField(props) {
-    const { formName, name, title, type, value, onChange } = props;
+    const { formName, name, title, type, value, onChange, minLength, pattern, required, error } = props;
 
     return (
         <fieldset className={`input-field ${formName}__input-field`}>
@@ -15,9 +16,14 @@ function InputField(props) {
                 name={name}
                 type={type}
                 value={value}
-                onChange={(event) => onChange(event.target.value)}
+                onChange={(event) => onChange(event.target)}
+                minLength={minLength || "2"}
+                maxLength="30"
+                pattern={pattern || undefined}
+                required={required || false}
+
             />
-            <FormError isHidden={true} name={name} type="input" message="" />
+            <FormError isHidden={false} name={name} type="input" message={error} />
         </fieldset>
     )
 }
