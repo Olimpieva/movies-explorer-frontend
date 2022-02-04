@@ -5,7 +5,7 @@ import MoviesCard from "../MoviesCard/MoviesCard";
 
 import './MoviesCardList.css';
 
-function MoviesCardList({ movies }) {
+function MoviesCardList({ movies, onSaveMovie, onRemoveMovie }) {
 
     const location = useLocation();
 
@@ -17,6 +17,8 @@ function MoviesCardList({ movies }) {
                         key={index + 1}
                         movie={movie}
                         location={location.pathname}
+                        onMovieCardLike={onSaveMovie}
+                        onMovieCardRemove={onRemoveMovie}
                     />
                 );
             })}

@@ -7,7 +7,7 @@ import FormError from "../FormError/FormError";
 import './Profile.css';
 import SubmitButton from "../SubmitButton/SubmitButton";
 
-function Profile() {
+function Profile({ onLogout, onEditProfile }) {
     const [isEdit, setIsEdit] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('')
@@ -16,7 +16,16 @@ function Profile() {
     useEffect(() => {
         setName(user.name);
         setEmail(user.email);
-    }, [user])
+    }, [user]);
+
+    function onSubmit(event) {
+        event.preventDefault();
+        onEditProfile({
+            name,
+            email,
+        })
+        setIsEdit(false);
+    }
 
 
 
@@ -27,7 +36,7 @@ function Profile() {
                 <section className="profile">
                     <h1 className="profile__greetings">Привет, {user.name}!</h1>
 
-                    <form className="profile__form">
+                    <form className="profile__form" onSubmit={onSubmit}>
                         <fieldset className="profile__fieldset">
                             <label htmlFor="profile-name" className="profile__label">Имя</label>
                             <input type="text" id="profile-name" name="profile-name" className="profile__input" disabled={!isEdit} value={name || ''} onChange={(event) => {
@@ -47,16 +56,19 @@ function Profile() {
                         </fieldset>
 
                         <div className="profile__buttons-container">
-                            {isEdit ? <>
-                                <FormError isHidden={true} name="submit-profile" type="button" message="" />
-                                <SubmitButton text="Сохранить" />
-                            </> : <>
-                                <button type="button" className="profile__button profile__button_type_submit" onClick={(e) => {
-                                    e.preventDefault();
-                                    setIsEdit(true)
-                                }}>Редактировать</button>
-                                <button type="reset" className="profile__button profile__button_type_logout">Выйти из аккаунта</button>
-                            </>}
+                            {isEdit ?
+                                <>
+                                    <FormError isHidden={true} name="submit-profile" type="button" message="" />
+                                    <SubmitButton text="Сохранить" />
+                                </>
+                                :
+                                <>
+                                    <button type="button" className="profile__button profile__button_type_submit" onClick={(e) => {
+                                        e.preventDefault();
+                                        setIsEdit(true)
+                                    }}>Редактировать</button>
+                                    <button type="reset" className="profile__button profile__button_type_logout" onClick={onLogout}>Выйти из аккаунта</button>
+                                </>}
                         </div>
                     </form>
                 </section>

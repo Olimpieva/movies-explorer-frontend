@@ -11,14 +11,11 @@ import Logo from "../Logo/Logo";
 import './Main.css';
 import Header from "../Header/Header";
 
-
-function Main() {
-
-    const isAuthorized = false;
+function Main({ loggedIn }) {
 
     return (
         <div className="main-page">
-            {isAuthorized ?
+            {loggedIn ?
                 <Header />
                 :
                 <header className="main-page__header">

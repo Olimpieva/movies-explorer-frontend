@@ -12,7 +12,7 @@
 
 .movies-card__image {
     width: 100%;
-    min-height: 168px;
+    height: 168px;
     object-fit: cover;
     border-radius: 10px 10px 0 0;
 }
