@@ -7,7 +7,7 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Footer from "../Footer/Footer";
 import { useEffect } from "react/cjs/react.development";
 
-function SavedMovies({ onSaveMovie, onRemoveMovie }) {
+function SavedMovies({ onSaveMovie, onSearchMovie, onRemoveMovie }) {
     const [foundMovies, setFoundMovies] = useState([]);
 
     const savedMovies = useContext(CurrentSavedMoviesContext);

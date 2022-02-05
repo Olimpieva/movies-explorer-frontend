@@ -4,37 +4,32 @@ import { Link } from "react-router-dom";
 import Auth from "../Auth/Auth";
 import InputField from "../InputField/InputField";
 import { useValidation } from "../../utils/useValidation";
+import { emailValidationErrorMessages, passwordValidationErrorMessages } from "../../utils/constans";
 
 import './Register.css';
 
 function Register({ onRegister }) {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
-    const { values, errors, isValid, handleChange, resetForm, setValues, setIsValid, setErrors } = useValidation();
+    const { values, validityState, isFormValid, handleChange, resetForm, setValues, setIsFormValid, setValidityState } = useValidation();
 
-
+    console.log({ validityState })
+    console.log({ values })
     const handleSubmit = (event) => {
-        // event.preventDefault();
-        // onRegister({
-        //     name,
-        //     email,
-        //     password
-        // });
+        event.preventDefault();
+        onRegister(values);
         console.log('da')
     }
 
     return (
         <main className="register">
-            <Auth name="register" title="Добро пожаловать!" buttonText="Зарегистрироваться" onSubmit={handleSubmit}>
+            <Auth name="register" title="Добро пожаловать!" buttonText="Зарегистрироваться" onSubmit={handleSubmit} isValid={isFormValid}>
                 <InputField
                     formName="register"
                     name="name" title="Имя"
                     type="text"
                     value={values.name || ''}
                     onChange={handleChange}
-                    error={errors.name}
+                    error={validityState.name}
                 />
                 <InputField
                     formName="register"
@@ -43,9 +38,10 @@ function Register({ onRegister }) {
                     type="email"
                     value={values.email || ''}
                     onChange={handleChange}
+                    overrideErrorMessages={emailValidationErrorMessages}
                     pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}"
                     required
-                    error={errors.email}
+                    error={validityState.email}
                 />
                 <InputField
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30}"
@@ -56,7 +52,8 @@ function Register({ onRegister }) {
                     value={values.password || ''}
                     onChange={handleChange}
                     minLength="8"
-                    error={errors.password}
+                    overrideErrorMessages={passwordValidationErrorMessages}
+                    error={validityState.password}
                     required
                 />
             </Auth>

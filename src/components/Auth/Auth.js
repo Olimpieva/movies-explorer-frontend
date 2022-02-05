@@ -7,7 +7,7 @@ import SubmitButton from "../SubmitButton/SubmitButton";
 import './Auth.css';
 
 function Auth(props) {
-    const { name, title, buttonText, onSubmit } = props;
+    const { name, title, buttonText, onSubmit, isValid } = props;
 
     return (
         <div className="auth">
@@ -16,7 +16,7 @@ function Auth(props) {
             <form className={`auth__form auth__form-${name}`} name={`auth-${name}`} onSubmit={onSubmit}>
                 {props.children}
                 <FormError isHidden={true} name={`submit-${name}`} type="button" message="" />
-                <SubmitButton text={buttonText} />
+                <SubmitButton text={buttonText} disabled={!isValid} />
             </form>
         </div>
     )

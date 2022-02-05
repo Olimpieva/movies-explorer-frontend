@@ -73,7 +73,6 @@ function App() {
   }
 
   useEffect(() => {
-    console.log('Ya tut')
     checkUserValidity();
   }, [])
 
@@ -122,10 +121,6 @@ function App() {
   }
   async function handleSearchMovies(keyword, checkboxes) {
 
-    if (!keyword) {
-
-    }
-
     let movies = (location === '/movies' ? allMovies : savedMovies)
       .filter(movie => movie.nameRU.toLowerCase().includes(keyword))
 
@@ -137,7 +132,6 @@ function App() {
   }
 
   async function handleSaveMovie(movie) {
-    console.log({ movie })
     let savedMovie;
 
     try {
@@ -148,9 +142,11 @@ function App() {
     }
 
     getSavedMovies()
+    return savedMovie;
   }
 
   async function handleRemoveMovie(movie) {
+    console.log("XNJJJJJJj")
     let removedMovie;
     console.log({ movie })
 
@@ -160,6 +156,8 @@ function App() {
     } catch (error) {
       console.log(error)
     }
+
+    getSavedMovies()
   }
   //{"_id":"61fa70c16f6317fb4922c525","name":"Test User","email":"testuser@mail.ru"}
   //{_id: '61fbc9b55bee06144ba1679d', name: 'Test user 2', email: 'testemail@yandex.ru', __v: 0}
@@ -172,8 +170,8 @@ function App() {
             <Route exact path="/" element={<Main loggedIn={loggedIn} />} />
             <Route path="/signup" element={<Register onRegister={handleRegister} />} />
             <Route path="/signin" element={<Login onLogin={handleLogin} />} />
-            <Route path="/movies" element={<Movies onSaveMovie={handleSaveMovie} onRemoveMovie={handleRemoveMovie} />} />
-            <Route path="/saved-movies" element={<SavedMovies />} />
+            <Route path="/movies" element={<Movies onSearchMovie={handleSearchMovies} onSaveMovie={handleSaveMovie} onRemoveMovie={handleRemoveMovie} />} />
+            <Route path="/saved-movies" element={<SavedMovies onSearchMovie={handleSearchMovies} onRemoveMovie={handleRemoveMovie} />} />
             <Route path="/profile" element={<Profile onLogout={handleLogout} onEditProfile={handleEditProfile} />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -3,9 +3,9 @@ import React from "react";
 
 import './SubmitButton.css';
 
-function SubmitButton({ text }) {
+function SubmitButton({ text, disabled }) {
     return (
-        <button className="button-submit" type="submit">{text}</button>
+        <button className="button-submit" type="submit" disabled={disabled}>{text}</button>
     )
 }
 

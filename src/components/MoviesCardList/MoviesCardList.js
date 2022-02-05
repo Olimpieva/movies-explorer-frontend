@@ -7,6 +7,8 @@ import './MoviesCardList.css';
 
 function MoviesCardList({ movies, onSaveMovie, onRemoveMovie }) {
 
+    console.log('CARD LIST')
+
     const location = useLocation();
 
     return (
@@ -15,7 +17,7 @@ function MoviesCardList({ movies, onSaveMovie, onRemoveMovie }) {
                 return (
                     <MoviesCard
                         key={index + 1}
-                        movie={movie}
+                        currentMovie={movie}
                         location={location.pathname}
                         onMovieCardLike={onSaveMovie}
                         onMovieCardRemove={onRemoveMovie}

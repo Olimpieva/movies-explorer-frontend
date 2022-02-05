@@ -1,61 +1,26 @@
 import { useCallback, useState } from 'react';
 
-export function useValidation() {
+export function useValidation(initialValidationValue = false) {
   const [values, setValues] = useState({});
-  const [errors, setErrors] = useState({});
-  const [isValid, setIsValid] = useState(false);
-
-  console.log({ values })
-  console.log({ isValid })
-
-  const setErrorMessage = (input) => {
-    const validityState = input.validity;
-    console.log({ input })
-    console.log({ validityState })
-
-    if (validityState.valid === true) {
-      return ''
-    }
-
-    if (validityState.typeMismatch) {
-      return 'Введите валидный адрес.'
-    }
-
-    if (validityState.patternMismatch) {
-      const message = input.name === "password" ?
-        'Пароль должен содержать минимум 8 символов, символы нижнего и верхнего регистра, цифры.'
-        :
-        'Поле заполнено некорректно.'
-      return message
-    }
-
-    if (validityState.tooShort) {
-      return `Поле должно содержать минимум ${input.minLength} символа.`
-    }
-
-    if (validityState.valueMissinf) {
-      return 'Поле должно быть заполнено.'
-    }
-
-  }
+  const [validityState, setValidityState] = useState({});
+  const [isFormValid, setIsFormValid] = useState(initialValidationValue);
 
   const handleChange = (input) => {
-
+    console.log(input)
     const name = input.name;
     const value = input.value;
 
     setValues({ ...values, [name]: value });
-    const errorMessage = setErrorMessage(input);
-    setErrors({ ...errors, [name]: errorMessage });
-    setIsValid(input.closest('form').checkValidity());
+    setValidityState({ ...validityState, [name]: input.validity });
+    setIsFormValid(input.closest('form').checkValidity());
   }
 
-  const resetForm = useCallback((newValues = {}, newErrors = {}, newIsValid = false) => {
+  const resetForm = useCallback((newValues = {}, newErrors = {}, newIsFormValid = false) => {
     setValues(newValues);
-    setErrors(newErrors);
-    setIsValid(newIsValid);
+    setValidityState(newErrors);
+    setIsFormValid(newIsFormValid);
   },
-    [setValues, setErrors, setIsValid]);
+    [setValues, setValidityState, setIsFormValid]);
 
-  return { values, errors, isValid, handleChange, resetForm, setValues, setIsValid, setErrors };
+  return { values, validityState, isFormValid, handleChange, resetForm, setValues, setIsFormValid, setValidityState };
 }
