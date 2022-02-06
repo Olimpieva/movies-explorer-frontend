@@ -19,8 +19,8 @@ function MoviesCardList({ movies, onSaveMovie, onRemoveMovie }) {
                         key={index + 1}
                         currentMovie={movie}
                         location={location.pathname}
-                        onMovieCardLike={onSaveMovie}
-                        onMovieCardRemove={onRemoveMovie}
+                        onSaveMovie={onSaveMovie}
+                        onRemoveMovie={onRemoveMovie}
                     />
                 );
             })}

@@ -9,48 +9,33 @@ import moviesApi from "../../utils/MoviesApi";
 
 import './Movies.css';
 
-function Movies({ onSaveMovie, onRemoveMovie }) {
+function Movies({
+    movies,
+    onSearchMovie,
+    onSaveMovie,
+    onRemoveMovie,
+    keyword,
+    onKeywordChange,
+    checkboxes,
+    onCheckboxChange,
+    isFormValid
+}) {
 
     console.log('MOVIES')
-
-    const [allMovies, setAllMovies] = useState([]);
-    const [foundMovies, setFoundMovies] = useState([]);
-
-    async function getAllMovies() {
-        try {
-            const movies = await moviesApi.getMovies();
-            setAllMovies(movies);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-        getAllMovies();
-    }, [])
-
-    const onSearch = (keyword, checkboxes) => {
-
-        console.log({ checkboxes })
-
-        let movies = allMovies.filter(movie => movie.nameRU.toLowerCase().includes(keyword))
-        console.log({ movies })
-
-        if (checkboxes["shortMovies-checkbox"]) {
-            console.log('WHY I AM NOT HERE')
-            movies = movies.filter((movie) => movie.duration <= 30)
-        }
-        console.log({ movies })
-
-        setFoundMovies(movies)
-    }
 
     return (
         <div className="movies-page">
             <Header />
             <main className="movies movies-page__movies">
-                <SearchForm onSearchMovie={onSearch} />
-                <MoviesCardList movies={foundMovies || []} onSaveMovie={onSaveMovie} onRemoveMovie={onRemoveMovie} />
+                <SearchForm
+                    onSearchMovie={onSearchMovie}
+                    keyword={keyword}
+                    onKeywordChange={onKeywordChange}
+                    checkboxes={checkboxes}
+                    onCheckboxChange={onCheckboxChange}
+                    isFormValid={isFormValid}
+                />
+                <MoviesCardList movies={movies} onSaveMovie={onSaveMovie} onRemoveMovie={onRemoveMovie} />
                 <More isVisible={true} />
             </main>
             <Footer />

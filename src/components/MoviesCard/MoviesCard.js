@@ -6,33 +6,31 @@ import './MoviesCard.css';
 
 function MoviesCard(props) {
 
-    const { currentMovie, location, onMovieCardLike, onMovieCardRemove } = props;
+    const { currentMovie, location, onSaveMovie, onRemoveMovie } = props;
+
+    console.log({ currentMovie })
 
     const savedMovies = useContext(CurrentSavedMoviesContext);
-    console.log({ currentMovie: currentMovie.nameRU })
-
     const imageLink = location === '/movies' ? 'https://api.nomoreparties.co' + currentMovie.image.url : currentMovie.image;
     const thumbnailLink = location === '/movies' ? 'https://api.nomoreparties.co' + currentMovie.image.formats.thumbnail.url : currentMovie.thumbnail;
     const trailerLink = currentMovie.trailerLink || currentMovie.trailer;
     const duration = `${Math.trunc(currentMovie.duration / 60)}ч ${currentMovie.duration % 60}м`;
-
 
     const likedCard = useMemo(() => {
         return savedMovies.find((savedMovie) => savedMovie.movieId === currentMovie.id);
     }, [savedMovies, currentMovie])
 
     function toggleMoviesCardLike() {
-        console.log({ likedCard })
         if (likedCard) {
             handleMovieCardRemove(likedCard);
 
         } else {
-            handleMovieCardLike();
+            handleMovieCardSave();
         }
     }
 
-    function handleMovieCardLike() {
-        onMovieCardLike({
+    function handleMovieCardSave() {
+        onSaveMovie({
             movieId: currentMovie.id,
             nameRU: currentMovie.nameRU,
             nameEN: currentMovie.nameEN || 'Неизвестно',
@@ -48,7 +46,7 @@ function MoviesCard(props) {
     }
 
     function handleMovieCardRemove(movie) {
-        onMovieCardRemove(movie);
+        onRemoveMovie(movie);
     }
 
     return (

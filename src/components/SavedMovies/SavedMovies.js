@@ -1,39 +1,39 @@
 import React, { useContext, useState } from "react";
 
-import { CurrentSavedMoviesContext } from '../../context/CurrentSavedMoviesContext';
 import Header from "../Header/Header";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Footer from "../Footer/Footer";
 import { useEffect } from "react/cjs/react.development";
 
-function SavedMovies({ onSaveMovie, onSearchMovie, onRemoveMovie }) {
-    const [foundMovies, setFoundMovies] = useState([]);
+function SavedMovies({ initialMovies,
+    movies,
+    setMovies,
+    onSaveMovie,
+    onSearchMovie,
+    onRemoveMovie,
+    keyword,
+    onKeywordChange,
+    checkboxes,
+    onCheckboxChange,
+    isFormValid
+}) {
 
-    const savedMovies = useContext(CurrentSavedMoviesContext);
-
-    useEffect(() => {
-        console.log('YA TUT')
-        setFoundMovies(savedMovies);
-    }, [])
-
-    const onSearch = (keyword, checkboxes) => {
-
-        let movies = savedMovies.filter(movie => movie.nameRU.toLowerCase().includes(keyword))
-
-        if (checkboxes["shortMovies-checkbox"]) {
-            movies = movies.filter((movie) => movie.duration <= 30)
-        }
-
-        setFoundMovies(movies)
-    }
+    console.log('SAVED_MOVIES')
 
     return (
         <div className="saved-movies-page">
             <Header />
             <main className="saved-movies saved-movies-page__movies">
-                <SearchForm onSearchMovie={onSearch} />
-                <MoviesCardList movies={foundMovies} onSaveMovie={onSaveMovie} onRemoveMovie={onRemoveMovie} />
+                <SearchForm
+                    onSearchMovie={onSearchMovie}
+                    keyword={keyword}
+                    onKeywordChange={onKeywordChange}
+                    checkboxes={checkboxes}
+                    onCheckboxChange={onCheckboxChange}
+                    isFormValid={isFormValid}
+                />
+                <MoviesCardList movies={movies} onSaveMovie={onSaveMovie} onRemoveMovie={onRemoveMovie} />
             </main>
             <Footer />
         </div>

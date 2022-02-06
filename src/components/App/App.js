@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 
 import { CurrentUserContext } from '../../context/CurrentUserContext';
@@ -15,6 +15,7 @@ import './App.css';
 
 import mainApi from "../../utils/MainApi";
 import moviesApi from "../../utils/MoviesApi";
+import MoviesPages from "../MoviesPages/MoviesPages";
 
 // import { movies, savedMovies } from '../../fixtures';
 
@@ -24,17 +25,18 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
-  const [allMovies, setAllMovies] = useState([]);
-  const [savedMovies, setSavedMovies] = useState([]);
+  const [allMovies, setAllMovies] = useState(null);
+  const [savedMovies, setSavedMovies] = useState(null);
   const [selectedMovies, setSelectedMovies] = useState([]);
 
   const navigate = useNavigate();
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   async function getAllMovies() {
     try {
       const movies = await moviesApi.getMovies();
       setAllMovies(movies);
+      return movies;
     } catch (error) {
       console.log(error);
     }
@@ -45,7 +47,7 @@ function App() {
 
     try {
       movies = await mainApi.getSavedMovies();
-      console.log({ 'SavedMovies': movies });
+      console.log({ 'SavedMoviesAPP': movies });
     } catch (error) {
       return console.log(error);
     }
@@ -68,7 +70,6 @@ function App() {
     setLoggedIn(true);
     setCurrentUser(user);
     getSavedMovies();
-    getAllMovies();
     navigate('/movies');
   }
 
@@ -119,17 +120,45 @@ function App() {
 
     setCurrentUser(updatedUser);
   }
-  async function handleSearchMovies(keyword, checkboxes) {
+  async function handleSearchMovies(keyword = "", checkboxes) {
 
-    let movies = (location === '/movies' ? allMovies : savedMovies)
-      .filter(movie => movie.nameRU.toLowerCase().includes(keyword))
+    let moviesToSearch;
+    console.log({ keyword, checkboxes })
 
-    if (checkboxes["shortMovies-checkbox"]) {
-      movies = movies.filter((movie) => movie.duration <= 30)
+    console.log('APP SEARCH')
+
+    if (pathname === '/movies') {
+      console.log('LOCATION MOVIES')
+      if (!allMovies) {
+        moviesToSearch = await getAllMovies()
+      } else {
+        moviesToSearch = allMovies;
+      }
+    } else {
+      if (!savedMovies) {
+        return undefined;
+      }
+      moviesToSearch = savedMovies;
     }
 
-    setSelectedMovies(movies)
+    const foundMovies = moviesToSearch.filter(movie => movie.nameRU.toLowerCase().includes(keyword.toLowerCase()));
+
+    setSelectedMovies(foundMovies)
   }
+  // const foundMoviesByCheckbox = useMemo((checkboxes) => {
+  //   if (!checkboxes["shortMovies-checkbox"]) {
+  //     return selectedMovies;
+  //   }
+  //   return
+  // }, [selectedMovies])
+  // async function handleSearchMoviesByCheckbox(checkboxes) {
+
+  //   let foundMovies
+  //   if (checkboxes["shortMovies-checkbox"]) {
+  //     foundMovies = selectedMovies.filter((movie) => movie.duration <= 30)
+  //   }
+  //   selectedMovies(foundMovies)
+  // }
 
   async function handleSaveMovie(movie) {
     let savedMovie;
@@ -146,13 +175,8 @@ function App() {
   }
 
   async function handleRemoveMovie(movie) {
-    console.log("XNJJJJJJj")
-    let removedMovie;
-    console.log({ movie })
-
     try {
-      removedMovie = await mainApi.removeSavedMovie(movie._id)
-      console.log({ removedMovie })
+      await mainApi.removeSavedMovie(movie._id)
     } catch (error) {
       console.log(error)
     }
@@ -167,11 +191,27 @@ function App() {
       <CurrentSavedMoviesContext.Provider value={savedMovies || []}>
         <div className="app">
           <Routes>
-            <Route exact path="/" element={<Main loggedIn={loggedIn} />} />
+            <Route path="/" element={<Main loggedIn={loggedIn} />} />
             <Route path="/signup" element={<Register onRegister={handleRegister} />} />
             <Route path="/signin" element={<Login onLogin={handleLogin} />} />
-            <Route path="/movies" element={<Movies onSearchMovie={handleSearchMovies} onSaveMovie={handleSaveMovie} onRemoveMovie={handleRemoveMovie} />} />
-            <Route path="/saved-movies" element={<SavedMovies onSearchMovie={handleSearchMovies} onRemoveMovie={handleRemoveMovie} />} />
+            <Route path={"/*"} element={<MoviesPages />} />
+            {/* <Route path="/movies" element={
+              <Movies
+                movies={selectedMovies || []}
+                onSearchMovie={handleSearchMovies}
+                onSaveMovie={handleSaveMovie}
+                onRemoveMovie={handleRemoveMovie}
+              />}
+            />
+            <Route path="/saved-movies" element={
+              <SavedMovies
+                initialMovies={savedMovies}
+                movies={selectedMovies || []}
+                setMovies={setSelectedMovies}
+                onSearchMovie={handleSearchMovies}
+                onRemoveMovie={handleRemoveMovie}
+              />}
+            /> */}
             <Route path="/profile" element={<Profile onLogout={handleLogout} onEditProfile={handleEditProfile} />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

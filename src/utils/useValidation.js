@@ -6,7 +6,6 @@ export function useValidation(initialValidationValue = false) {
   const [isFormValid, setIsFormValid] = useState(initialValidationValue);
 
   const handleChange = (input) => {
-    console.log(input)
     const name = input.name;
     const value = input.value;
 
@@ -22,5 +21,5 @@ export function useValidation(initialValidationValue = false) {
   },
     [setValues, setValidityState, setIsFormValid]);
 
-  return { values, validityState, isFormValid, handleChange, resetForm, setValues, setIsFormValid, setValidityState };
+  return { values, setValues, handleChange, validityState, setValidityState, isFormValid, setIsFormValid, resetForm, };
 }

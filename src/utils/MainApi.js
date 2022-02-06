@@ -8,7 +8,6 @@ class MainApi {
     async _sendRequest(path, requestOptions) {
         try {
             const response = await fetch(`${this._url}/${path}`, { ...requestOptions, credentials: 'include' });
-            console.log({ response })
             if (!response.ok) {
                 throw new Error(`Произошла ошибка ${response.status}`)
             }
