@@ -70,7 +70,7 @@ function App() {
     setLoggedIn(true);
     setCurrentUser(user);
     getSavedMovies();
-    navigate('/movies');
+    // navigate('/movies');
   }
 
   useEffect(() => {
@@ -89,12 +89,15 @@ function App() {
 
   async function handleLogin(userData) {
     try {
-      await mainApi.login(userData);
+      const user = await mainApi.login(userData);
+
+      setLoggedIn(true);
+      setCurrentUser(user);
+      getSavedMovies();
+      navigate('/movies');
     } catch (error) {
       console.log(error)
     }
-
-    checkUserValidity();
   }
 
   async function handleLogout() {
@@ -194,7 +197,8 @@ function App() {
             <Route path="/" element={<Main loggedIn={loggedIn} />} />
             <Route path="/signup" element={<Register onRegister={handleRegister} />} />
             <Route path="/signin" element={<Login onLogin={handleLogin} />} />
-            <Route path={"/*"} element={<MoviesPages />} />
+            <Route path={"/movies"} element={<MoviesPages savedMovies={savedMovies} setSavedMovies={setSavedMovies} />} />
+            <Route path={"/saved-movies"} element={<MoviesPages savedMovies={savedMovies} setSavedMovies={setSavedMovies} />} />
             {/* <Route path="/movies" element={
               <Movies
                 movies={selectedMovies || []}

@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
@@ -7,15 +7,11 @@ import SavedMovies from "../SavedMovies/SavedMovies";
 import mainApi from "../../utils/MainApi";
 import moviesApi from "../../utils/MoviesApi";
 import { useValidation } from '../../utils/useValidation';
-import NotFound from "../NotFound/NotFound";
 import { useMemo } from 'react/cjs/react.development';
 
-import { CurrentSavedMoviesContext } from '../../context/CurrentSavedMoviesContext';
-
-function MoviesPages() {
+function MoviesPages({ savedMovies, setSavedMovies }) {
     console.log("MOVIES_PAGES")
     const [allMovies, setAllMovies] = useState(null);
-    // const [savedMovies, setSavedMovies] = useState(null);
     const [selectedMovies, setSelectedMovies] = useState([]);
     const [checkboxes, setCheckboxes] = useState({
         "shortMovies-checkbox": false,
@@ -25,19 +21,16 @@ function MoviesPages() {
 
     const { pathname } = useLocation();
 
-    const savedMovies = useContext(CurrentSavedMoviesContext)
-
+    const alreadySetInitialValues = useRef(false);
 
     useEffect(() => {
-        console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-        console.log(savedMovies)
-        if (pathname !== '/saved-movies') {
-            console.log('YA TUT WTO LI')
+        if (pathname !== '/saved-movies' || savedMovies === null || alreadySetInitialValues.current === true) {
             return undefined;
         }
-        console.log('YA TUT')
+
         setSelectedMovies(savedMovies)
-    }, [pathname])
+        alreadySetInitialValues.current = true;
+    }, [pathname, savedMovies])
 
     async function getAllMovies() {
         try {
@@ -121,39 +114,32 @@ function MoviesPages() {
         getSavedMovies()
     }
 
-    return (
-        <Routes>
-            <Route path="/movies" element={
-                <Movies
-                    movies={foundMoviesByCheckbox || []}
-                    onSearchMovie={handleSearchMovies}
-                    onSaveMovie={handleSaveMovie}
-                    onRemoveMovie={handleRemoveMovie}
-                    keyword={keyword}
-                    onKeywordChange={onKeywordChange}
-                    checkboxes={checkboxes}
-                    onCheckboxChange={setCheckboxes}
-                    isFormValid={isFormValid}
-                />}
-            />
-            <Route path="/saved-movies" element={
-                <SavedMovies
-                    initialMovies={savedMovies}
-                    movies={foundMoviesByCheckbox || []}
-                    setMovies={setSelectedMovies}
-                    onSearchMovie={handleSearchMovies}
-                    onRemoveMovie={handleRemoveMovie}
-                    keyword={keyword}
-                    onKeywordChange={onKeywordChange}
-                    checkboxes={checkboxes}
-                    onCheckboxChange={setCheckboxes}
-                    isFormValid={isFormValid}
-                />}
-            />
-            <Route path="*" element={<NotFound />} />
-        </Routes>
+    if (pathname === 'movies') {
+        return <Movies
+            movies={foundMoviesByCheckbox || []}
+            onSearchMovie={handleSearchMovies}
+            onSaveMovie={handleSaveMovie}
+            onRemoveMovie={handleRemoveMovie}
+            keyword={keyword}
+            onKeywordChange={onKeywordChange}
+            checkboxes={checkboxes}
+            onCheckboxChange={setCheckboxes}
+            isFormValid={isFormValid}
+        />
+    }
 
-    )
+    return <SavedMovies
+        initialMovies={savedMovies}
+        movies={foundMoviesByCheckbox || []}
+        setMovies={setSelectedMovies}
+        onSearchMovie={handleSearchMovies}
+        onRemoveMovie={handleRemoveMovie}
+        keyword={keyword}
+        onKeywordChange={onKeywordChange}
+        checkboxes={checkboxes}
+        onCheckboxChange={setCheckboxes}
+        isFormValid={isFormValid}
+    />
 }
 
 export default MoviesPages;
