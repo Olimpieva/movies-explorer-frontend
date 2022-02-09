@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import Header from "../Header/Header";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Footer from "../Footer/Footer";
-import More from "../More/More";
-import moviesApi from "../../utils/MoviesApi";
 
 import './Movies.css';
 
@@ -18,10 +16,11 @@ function Movies({
     onKeywordChange,
     checkboxes,
     onCheckboxChange,
-    isFormValid
+    isFormValid,
+    isMovieLiked,
+    isDataLoading,
+    isNoData
 }) {
-
-    console.log('MOVIES')
 
     return (
         <div className="movies-page">
@@ -35,8 +34,14 @@ function Movies({
                     onCheckboxChange={onCheckboxChange}
                     isFormValid={isFormValid}
                 />
-                <MoviesCardList movies={movies} onSaveMovie={onSaveMovie} onRemoveMovie={onRemoveMovie} />
-                <More isVisible={true} />
+                <MoviesCardList
+                    movies={movies}
+                    isMovieLiked={isMovieLiked}
+                    onSaveMovie={onSaveMovie}
+                    onRemoveMovie={onRemoveMovie}
+                    isDataLoading={isDataLoading}
+                    isNoData={isNoData}
+                />
             </main>
             <Footer />
         </div>

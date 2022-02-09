@@ -1,14 +1,12 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 
 import Header from "../Header/Header";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Footer from "../Footer/Footer";
-import { useEffect } from "react/cjs/react.development";
 
-function SavedMovies({ initialMovies,
+function SavedMovies({
     movies,
-    setMovies,
     onSaveMovie,
     onSearchMovie,
     onRemoveMovie,
@@ -16,10 +14,9 @@ function SavedMovies({ initialMovies,
     onKeywordChange,
     checkboxes,
     onCheckboxChange,
-    isFormValid
+    isFormValid,
+    isNoData
 }) {
-
-    console.log('SAVED_MOVIES')
 
     return (
         <div className="saved-movies-page">
@@ -33,7 +30,12 @@ function SavedMovies({ initialMovies,
                     onCheckboxChange={onCheckboxChange}
                     isFormValid={isFormValid}
                 />
-                <MoviesCardList movies={movies} onSaveMovie={onSaveMovie} onRemoveMovie={onRemoveMovie} />
+                <MoviesCardList
+                    movies={movies}
+                    onSaveMovie={onSaveMovie}
+                    onRemoveMovie={onRemoveMovie}
+                    isNoData={isNoData}
+                />
             </main>
             <Footer />
         </div>

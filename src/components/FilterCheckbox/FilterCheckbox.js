@@ -6,17 +6,13 @@ function FilterCheckbox({ name, checkboxText, value, onChange }) {
 
     return (
         <div className="filter search__filter">
-            <input
+            <input className="filter__checkbox" id={`${name}-checkbox`}
                 type="checkbox"
-                id={`${name}-checkbox`}
-                className="filter__checkbox"
-                onChange={(event) => {
-                    console.log(event)
-                    onChange(!value, event.target.id)
-                }}
+                checked={value}
+                onChange={(event) => { onChange(!value, event.target.id) }}
                 value={value}
             />
-            <label htmlFor={`${name}-checkbox`} className="filter__label"></label>
+            <label className="filter__label" htmlFor={`${name}-checkbox`} ></label>
             <p className="filter__text">{checkboxText}</p>
         </div>
     );

@@ -1,33 +1,44 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { CurrentUserContext } from '../../context/CurrentUserContext';
+
 import Header from "../Header/Header";
 import FormError from "../FormError/FormError";
+import SubmitButton from "../SubmitButton/SubmitButton";
+import { useValidation } from "../../utils/useValidation";
+import { emailValidationErrorMessages } from "../../utils/constans";
 
 import './Profile.css';
-import SubmitButton from "../SubmitButton/SubmitButton";
 
 function Profile({ onLogout, onEditProfile }) {
-    const [isEdit, setIsEdit] = useState(false);
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('')
+
     const user = useContext(CurrentUserContext);
+    const [isEdit, setIsEdit] = useState(false);
+    const [resError, setResError] = useState('');
+    const { values: { name, email }, handleChange, errors, isFormValid } = useValidation({
+        values: {
+            name: user.name,
+            email: user.email
+        }
+    },
+        { email: emailValidationErrorMessages, }
+    );
 
-    useEffect(() => {
-        setName(user.name);
-        setEmail(user.email);
-    }, [user]);
-
-    function onSubmit(event) {
+    async function onSubmit(event) {
         event.preventDefault();
-        onEditProfile({
+
+        const result = await onEditProfile({
             name,
             email,
-        })
-        setIsEdit(false);
-    }
+        });
 
+        if (result.hasOwnProperty('error')) {
+            setResError(result.error);
+        }
 
+        setIsEdit(result.hasOwnProperty('error'))
+
+    };
 
     return (
         <div className="profile-page">
@@ -38,36 +49,75 @@ function Profile({ onLogout, onEditProfile }) {
 
                     <form className="profile__form" onSubmit={onSubmit}>
                         <fieldset className="profile__fieldset">
-                            <label htmlFor="profile-name" className="profile__label">Имя</label>
-                            <input type="text" id="profile-name" name="profile-name" className="profile__input" disabled={!isEdit} value={name || ''} onChange={(event) => {
-                                setName(event.target.value);
-                            }} />
-                            <FormError isHidden={true} name="email" type="input" message="" />
+                            <label className="profile__label" htmlFor="profile-name">Имя</label>
+                            <input className="profile__input" id="profile-name"
+                                type="text"
+                                name="name"
+                                minLength="2"
+                                required
+                                disabled={!isEdit}
+                                value={name || ''}
+                                onChange={(event) => {
+                                    setResError('')
+                                    handleChange(event.target)
+                                }}
+                            />
+                            <FormError
+                                type="input"
+                                name="email"
+                                isHidden={!errors.name}
+                                message={errors.name}
+                            />
                         </fieldset>
 
                         <hr className="profile__line"></hr>
 
                         <fieldset className="profile__fieldset">
-                            <label htmlFor="profile-email" className="profile__label">E-mail</label>
-                            <input type="email" id="profile-email" name="profile-email" className="profile__input" disabled={!isEdit} value={email || ''} onChange={(event) => {
-                                setEmail(event.target.value)
-                            }} />
-                            <FormError isHidden={true} name="email" type="input" message="" />
+                            <label className="profile__label" htmlFor="profile-email" >E-mail</label>
+                            <input className="profile__input" id="profile-email"
+                                type="email"
+                                name="email"
+                                pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}"
+                                required
+                                disabled={!isEdit}
+                                value={email || ''}
+                                onChange={(event) => {
+                                    setResError('')
+                                    handleChange(event.target)
+                                }
+                                }
+                            />
+                            <FormError
+                                type="input"
+                                name="email"
+                                isHidden={!errors.email}
+                                message={errors.email}
+                            />
                         </fieldset>
 
                         <div className="profile__buttons-container">
                             {isEdit ?
                                 <>
-                                    <FormError isHidden={true} name="submit-profile" type="button" message="" />
-                                    <SubmitButton text="Сохранить" />
+                                    <FormError
+                                        type="button"
+                                        name="submit-profile"
+                                        isHidden={!resError}
+                                        message={resError}
+                                    />
+                                    <SubmitButton text="Сохранить" disabled={!isFormValid || (name === user.name && email === user.email)} />
                                 </>
                                 :
                                 <>
-                                    <button type="button" className="profile__button profile__button_type_submit" onClick={(e) => {
-                                        e.preventDefault();
-                                        setIsEdit(true)
-                                    }}>Редактировать</button>
-                                    <button type="reset" className="profile__button profile__button_type_logout" onClick={onLogout}>Выйти из аккаунта</button>
+                                    <button className="profile__button profile__button_type_submit"
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setIsEdit(true)
+                                        }}
+                                    >
+                                        Редактировать
+                                    </button>
+                                    <button className="profile__button profile__button_type_logout" type="reset" onClick={onLogout}>Выйти из аккаунта</button>
                                 </>}
                         </div>
                     </form>

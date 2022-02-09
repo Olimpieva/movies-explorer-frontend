@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
 
 import FormError from "../FormError/FormError";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
@@ -13,8 +13,6 @@ function SearchForm({
     checkboxes,
     onCheckboxChange,
     isFormValid }) {
-
-    console.log('SEARCH FORM')
 
 
     const onSearchButtonClick = (event) => {
@@ -40,10 +38,20 @@ function SearchForm({
                     onChange={(event) => onKeywordChange(event.target)}
                     required
                 />
-                <FormError isHidden={isFormValid} formName="search" name="movie" type="input" message={defaultValidationErrorMessages.valueMissing()} />
+                <FormError
+                    type="input"
+                    name="movie"
+                    isHidden={isFormValid}
+                    message={defaultValidationErrorMessages.valueMissing()}
+                />
                 <button className="search__button" onClick={onSearchButtonClick}></button>
             </form>
-            <FilterCheckbox name="shortMovies" checkboxText="Короткометражки" value={checkboxes["shortMovies-checkbox"]} onChange={onFilterCheckboxClick} />
+            <FilterCheckbox
+                name="shortMovies"
+                checkboxText="Короткометражки"
+                value={checkboxes["shortMovies-checkbox"]}
+                onChange={onFilterCheckboxClick}
+            />
         </section>
     );
 };

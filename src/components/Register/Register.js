@@ -10,51 +10,77 @@ import './Register.css';
 
 function Register({ onRegister }) {
 
-    const { values, validityState, isFormValid, handleChange, resetForm, setValues, setIsFormValid, setValidityState } = useValidation();
+    const [resError, setResError] = useState('');
 
-    console.log({ validityState })
-    console.log({ values })
-    const handleSubmit = (event) => {
+    const { values: { name, email, password }, errors, isFormValid, handleChange, resetForm } = useValidation(
+        undefined,
+        {
+            email: emailValidationErrorMessages,
+            password: passwordValidationErrorMessages,
+        }
+    );
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        onRegister(values);
-        console.log('da')
-    }
+        const result = await onRegister({
+            name,
+            email,
+            password,
+        });
+
+        if (result.hasOwnProperty('error')) {
+            setResError(result.error);
+        } else {
+            resetForm({}, {}, true)
+        }
+
+    };
 
     return (
         <main className="register">
-            <Auth name="register" title="Добро пожаловать!" buttonText="Зарегистрироваться" onSubmit={handleSubmit} isValid={isFormValid}>
+            <Auth
+                name="register"
+                title="Добро пожаловать!"
+                buttonText="Зарегистрироваться"
+                onSubmit={handleSubmit}
+                isValid={isFormValid}
+                error={resError}
+            >
                 <InputField
-                    formName="register"
-                    name="name" title="Имя"
                     type="text"
-                    value={values.name || ''}
+                    formName="register"
+                    name="name"
+                    title="Имя"
+                    required
+                    value={name || ''}
                     onChange={handleChange}
-                    error={validityState.name}
+                    error={errors.name}
+                    setResError={setResError}
                 />
                 <InputField
+                    type="email"
                     formName="register"
                     name="email"
                     title="E-mail"
-                    type="email"
-                    value={values.email || ''}
-                    onChange={handleChange}
-                    overrideErrorMessages={emailValidationErrorMessages}
                     pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}"
                     required
-                    error={validityState.email}
+                    value={email || ''}
+                    onChange={handleChange}
+                    error={errors.email}
+                    setResError={setResError}
                 />
                 <InputField
-                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30}"
+                    type="password"
                     formName="register"
                     name="password"
                     title="Пароль"
-                    type="password"
-                    value={values.password || ''}
-                    onChange={handleChange}
                     minLength="8"
-                    overrideErrorMessages={passwordValidationErrorMessages}
-                    error={validityState.password}
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30}"
                     required
+                    value={password || ''}
+                    onChange={handleChange}
+                    error={errors.password}
+                    setResError={setResError}
                 />
             </Auth>
             <span className="register__link-caption">Уже зарегистрированы?

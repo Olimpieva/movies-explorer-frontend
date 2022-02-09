@@ -2,6 +2,7 @@
     width: 100%;
     min-width: 320px;
     min-height: 100vh;
+    height: 100%;
     margin: 0 auto;
     padding: 0;
     border: 0;
@@ -17,4 +18,8 @@
     -ms-text-size-adjust: 100%;
     position: relative;
     transition: all 0.3s ease-out;
+  }
+
+  .app__preloader {
+    height: 100vh;
   }

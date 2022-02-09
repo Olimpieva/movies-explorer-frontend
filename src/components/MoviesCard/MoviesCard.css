@@ -26,6 +26,10 @@
     justify-content: center;
 }
 
+.movies-card__container:hover .movies-card__button_type_removal {
+    opacity: 1;
+}
+
 .movies-card__title {
     margin: auto 0;
     font-size: 12px;
@@ -67,11 +71,6 @@
     background: url("../../images/trash-icon.svg") center no-repeat;
     opacity: 0;
 }
-
-.movies-card__button_type_removal:hover {
-    opacity: 1;
-}
-
 
 @media screen and (min-width: 768px) {
 

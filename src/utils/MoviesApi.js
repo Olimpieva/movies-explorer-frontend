@@ -1,28 +1,26 @@
-import { MOVIES_URL } from "./constans";
+import { moviesApiOptions } from "./constans";
 
 class MoviesApi {
-    constructor(url) {
-        this._url = url;
+    constructor(options) {
+        this._url = options.baseUrl;
     }
 
     async getMovies() {
+        let promise;
 
         try {
-            const response = await fetch(this._url);
+            promise = await fetch(this._url);
 
-            if (!response.ok) {
-                throw new Error(`Произошла ошибка ${response.status}`)
+            if (promise.ok) {
+                return promise.json()
             }
 
-            const data = await response.json();
-            return data;
         } catch (error) {
             console.log(error)
         }
     }
-
 }
 
-const moviesApi = new MoviesApi(MOVIES_URL);
+const moviesApi = new MoviesApi(moviesApiOptions);
 
 export default moviesApi;

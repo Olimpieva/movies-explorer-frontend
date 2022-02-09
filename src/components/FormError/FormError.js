@@ -3,7 +3,7 @@ import React from "react";
 import './FormError.css'
 
 function FormError(props) {
-    const { isHidden, name, type, message } = props;
+    const { type, name, isHidden, message } = props;
 
     return (
         <span

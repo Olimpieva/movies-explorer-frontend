@@ -9,12 +9,12 @@ class MainApi {
         try {
             const response = await fetch(`${this._url}/${path}`, { ...requestOptions, credentials: 'include' });
             if (!response.ok) {
-                throw new Error(`Произошла ошибка ${response.status}`)
+                throw response;
             }
             const data = await response.json();
             return data;
         } catch (error) {
-            console.log(error)
+            throw error;
         }
     }
 
@@ -80,7 +80,6 @@ class MainApi {
     }
 
     createSavedMovie(movie) {
-        console.log({ 'movie in request': movie })
         return this._sendRequest(`movies`, {
             method: 'POST',
             headers: {

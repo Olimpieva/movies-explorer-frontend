@@ -1,25 +1,50 @@
 import { useCallback, useState } from 'react';
 
-export function useValidation(initialValidationValue = false) {
-  const [values, setValues] = useState({});
-  const [validityState, setValidityState] = useState({});
-  const [isFormValid, setIsFormValid] = useState(initialValidationValue);
+import { defaultValidationErrorMessages } from './constans';
+
+
+
+
+export function useValidation(initialState = { values: {}, isFormValid: true }, overrideErrorMessages = {}) {
+  const [values, setValues] = useState(initialState.values);
+  const [errors, setErrors] = useState({});
+  const [isFormValid, setIsFormValid] = useState(initialState.isFormValid);
 
   const handleChange = (input) => {
     const name = input.name;
     const value = input.value;
+    const minLength = input.minLength;
+    const validityState = input.validity;
+    let errorMessage = undefined;
+
+    if (!validityState.valid) {
+      const updatedErrorMessages = {
+        ...defaultValidationErrorMessages,
+        ...overrideErrorMessages[name]
+      }
+
+      const [, getValidationMessage] = Object.entries(updatedErrorMessages).find(([errorKey]) => {
+        const hasError = validityState[errorKey];
+        if (hasError) {
+          return true;
+        }
+        return false;
+      });
+
+      errorMessage = getValidationMessage({ minLength });
+    }
 
     setValues({ ...values, [name]: value });
-    setValidityState({ ...validityState, [name]: input.validity });
+    setErrors({ ...errors, [name]: errorMessage });
     setIsFormValid(input.closest('form').checkValidity());
   }
 
   const resetForm = useCallback((newValues = {}, newErrors = {}, newIsFormValid = false) => {
     setValues(newValues);
-    setValidityState(newErrors);
+    setErrors(newErrors);
     setIsFormValid(newIsFormValid);
   },
-    [setValues, setValidityState, setIsFormValid]);
+    [setValues, setErrors, setIsFormValid]);
 
-  return { values, setValues, handleChange, validityState, setValidityState, isFormValid, setIsFormValid, resetForm, };
+  return { values, setValues, handleChange, errors, setErrors, isFormValid, setIsFormValid, resetForm, };
 }

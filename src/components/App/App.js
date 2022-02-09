@@ -1,76 +1,51 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Route, Routes, useNavigate, useLocation, Navigate } from 'react-router-dom';
 
 import { CurrentUserContext } from '../../context/CurrentUserContext';
-import { CurrentSavedMoviesContext } from '../../context/CurrentSavedMoviesContext';
+
 import Main from "../Main/Main";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
-import Movies from "../Movies/Movies";
-import SavedMovies from "../SavedMovies/SavedMovies";
 import Profile from "../Profile/Profile";
+import MoviesPages from "../MoviesPages/MoviesPages";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import Preloader from "../Preloader/Preloader";
 import NotFound from "../NotFound/NotFound";
+import mainApi from "../../utils/MainApi";
+import { responseErrorMessages } from "../../utils/constans";
 
 import './App.css';
 
-import mainApi from "../../utils/MainApi";
-import moviesApi from "../../utils/MoviesApi";
-import MoviesPages from "../MoviesPages/MoviesPages";
-
-// import { movies, savedMovies } from '../../fixtures';
-
 function App() {
 
-  console.log('APP');
-
-  const [currentUser, setCurrentUser] = useState({});
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [allMovies, setAllMovies] = useState(null);
-  const [savedMovies, setSavedMovies] = useState(null);
-  const [selectedMovies, setSelectedMovies] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loggedIn, setLoggedIn] = useState();
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
-  async function getAllMovies() {
-    try {
-      const movies = await moviesApi.getMovies();
-      setAllMovies(movies);
-      return movies;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function getSavedMovies() {
-    let movies;
-
-    try {
-      movies = await mainApi.getSavedMovies();
-      console.log({ 'SavedMoviesAPP': movies });
-    } catch (error) {
-      return console.log(error);
-    }
-
-    setSavedMovies(movies);
-  }
 
   async function checkUserValidity() {
     let user;
 
     try {
       user = await mainApi.checkToken();
+
       if (!user) {
-        throw new Error(`Произошла ошибка авторизации`)
+        throw new Error(responseErrorMessages.invalidTokenData)
       }
+
     } catch (error) {
+      setLoggedIn(false);
       return console.log(error);
     }
 
-    setLoggedIn(true);
     setCurrentUser(user);
-    getSavedMovies();
-    // navigate('/movies');
+    setLoggedIn(true);
+
+    if (pathname === ("/signin" || "/signup")) {
+      navigate('/movies')
+    }
+
   }
 
   useEffect(() => {
@@ -78,38 +53,60 @@ function App() {
   }, [])
 
   async function handleRegister(userData) {
+    let user;
+
     try {
-      await mainApi.register(userData)
+      user = await mainApi.register(userData)
     } catch (error) {
-      console.log(error);
+      let message;
+
+      if (error.status === 409) {
+        message = responseErrorMessages.userAlreadyExist;
+      } else if (error.status === 500) {
+        message = responseErrorMessages.serverError;
+      } else {
+        message = responseErrorMessages.registerUserError;
+      }
+
+      return { error: message };
     }
 
     handleLogin(userData);
+    return user;
   }
 
   async function handleLogin(userData) {
-    try {
-      const user = await mainApi.login(userData);
+    let isLoggedIn;
 
-      setLoggedIn(true);
-      setCurrentUser(user);
-      getSavedMovies();
-      navigate('/movies');
+    try {
+      isLoggedIn = await mainApi.login(userData);
+      checkUserValidity()
     } catch (error) {
-      console.log(error)
+      let message;
+
+      if (error.status === 500) {
+        message = responseErrorMessages.serverError;
+      } else {
+        message = responseErrorMessages.invalidUserData;
+      }
+
+      return { error: message };
     }
+
+    return { message: isLoggedIn.message }
   }
 
   async function handleLogout() {
     try {
       await mainApi.logout();
     } catch (error) {
-      return console.log(error);
+      return console.log(responseErrorMessages.serverError);
     }
 
     setLoggedIn(false);
     setCurrentUser(null);
     navigate('/');
+    localStorage.clear();
   }
 
   async function handleEditProfile(userInfo) {
@@ -118,110 +115,56 @@ function App() {
     try {
       updatedUser = await mainApi.updateUserInfo(userInfo);
     } catch (error) {
-      return console.log(error);
+      let message;
+
+      if (error.status === 409) {
+        message = responseErrorMessages.userAlreadyExist;
+      } else if (error.status === 500) {
+        message = responseErrorMessages.serverError;
+      } else {
+        message = responseErrorMessages.updateUserError;
+      }
+
+      return { error: message };
     }
 
     setCurrentUser(updatedUser);
-  }
-  async function handleSearchMovies(keyword = "", checkboxes) {
-
-    let moviesToSearch;
-    console.log({ keyword, checkboxes })
-
-    console.log('APP SEARCH')
-
-    if (pathname === '/movies') {
-      console.log('LOCATION MOVIES')
-      if (!allMovies) {
-        moviesToSearch = await getAllMovies()
-      } else {
-        moviesToSearch = allMovies;
-      }
-    } else {
-      if (!savedMovies) {
-        return undefined;
-      }
-      moviesToSearch = savedMovies;
-    }
-
-    const foundMovies = moviesToSearch.filter(movie => movie.nameRU.toLowerCase().includes(keyword.toLowerCase()));
-
-    setSelectedMovies(foundMovies)
-  }
-  // const foundMoviesByCheckbox = useMemo((checkboxes) => {
-  //   if (!checkboxes["shortMovies-checkbox"]) {
-  //     return selectedMovies;
-  //   }
-  //   return
-  // }, [selectedMovies])
-  // async function handleSearchMoviesByCheckbox(checkboxes) {
-
-  //   let foundMovies
-  //   if (checkboxes["shortMovies-checkbox"]) {
-  //     foundMovies = selectedMovies.filter((movie) => movie.duration <= 30)
-  //   }
-  //   selectedMovies(foundMovies)
-  // }
-
-  async function handleSaveMovie(movie) {
-    let savedMovie;
-
-    try {
-      savedMovie = await mainApi.createSavedMovie(movie);
-      console.log({ savedMovie })
-    } catch (error) {
-      return console.log(error);
-    }
-
-    getSavedMovies()
-    return savedMovie;
+    return updatedUser;
   }
 
-  async function handleRemoveMovie(movie) {
-    try {
-      await mainApi.removeSavedMovie(movie._id)
-    } catch (error) {
-      console.log(error)
-    }
-
-    getSavedMovies()
-  }
-  //{"_id":"61fa70c16f6317fb4922c525","name":"Test User","email":"testuser@mail.ru"}
-  //{_id: '61fbc9b55bee06144ba1679d', name: 'Test user 2', email: 'testemail@yandex.ru', __v: 0}
 
   return (
-    <CurrentUserContext.Provider value={currentUser || {}}>
-      <CurrentSavedMoviesContext.Provider value={savedMovies || []}>
-        <div className="app">
+    <CurrentUserContext.Provider value={currentUser}>
+
+      <div className="app">
+        {loggedIn === undefined ?
+          <div className="app__preloader">
+            <Preloader />
+          </div>
+          :
           <Routes>
             <Route path="/" element={<Main loggedIn={loggedIn} />} />
-            <Route path="/signup" element={<Register onRegister={handleRegister} />} />
-            <Route path="/signin" element={<Login onLogin={handleLogin} />} />
-            <Route path={"/movies"} element={<MoviesPages savedMovies={savedMovies} setSavedMovies={setSavedMovies} />} />
-            <Route path={"/saved-movies"} element={<MoviesPages savedMovies={savedMovies} setSavedMovies={setSavedMovies} />} />
-            {/* <Route path="/movies" element={
-              <Movies
-                movies={selectedMovies || []}
-                onSearchMovie={handleSearchMovies}
-                onSaveMovie={handleSaveMovie}
-                onRemoveMovie={handleRemoveMovie}
-              />}
+            <Route path="/signup" element={loggedIn ?
+              <Navigate replace to="/movies" />
+              :
+              <Register onRegister={handleRegister} />}
             />
-            <Route path="/saved-movies" element={
-              <SavedMovies
-                initialMovies={savedMovies}
-                movies={selectedMovies || []}
-                setMovies={setSelectedMovies}
-                onSearchMovie={handleSearchMovies}
-                onRemoveMovie={handleRemoveMovie}
-              />}
-            /> */}
-            <Route path="/profile" element={<Profile onLogout={handleLogout} onEditProfile={handleEditProfile} />} />
+            <Route path="/signin" element={loggedIn ?
+              <Navigate replace to="/movies" />
+              :
+              <Login onLogin={handleLogin} />} />
+            <Route element={<ProtectedRoute loggedIn={loggedIn} />} >
+              <Route path="/movies" element={<MoviesPages />} />
+              <Route path="/saved-movies" element={<MoviesPages />} />
+              <Route path="/profile" element={<Profile onLogout={handleLogout} onEditProfile={handleEditProfile} />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </div >
-      </CurrentSavedMoviesContext.Provider>
-    </CurrentUserContext.Provider>
+        }
+
+      </div >
+
+    </CurrentUserContext.Provider >
   );
 }
 
