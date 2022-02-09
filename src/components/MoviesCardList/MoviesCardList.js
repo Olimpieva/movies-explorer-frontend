@@ -40,7 +40,7 @@ function MoviesCardList({ movies, onSaveMovie, onRemoveMovie, isMovieLiked, isDa
         <div>
             <ul className="movies-card-list">
                 {
-                    isDataLoading ?
+                    isDataLoading || isDataLoading && !isNoData.status ?
                         <Preloader />
                         :
                         isNoData.status ?
