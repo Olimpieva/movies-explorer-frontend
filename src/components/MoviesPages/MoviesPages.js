@@ -7,7 +7,7 @@ import SavedMovies from "../SavedMovies/SavedMovies";
 import mainApi from "../../utils/MainApi";
 import moviesApi from "../../utils/MoviesApi";
 import { useValidation } from '../../utils/useValidation';
-import { responseErrorMessages, defaultNoDataState } from '../../utils/constans';
+import { responseErrorMessages } from '../../utils/constans';
 import { getLocalStorageData, defaultCheckboxValue } from '../../utils/getLocalStorageData';
 
 function MoviesPages() {
@@ -23,7 +23,6 @@ function MoviesPages() {
         getLocalStorageData("checkboxes", defaultCheckboxValue) : defaultCheckboxValue
     );
     const [isDataLoading, setIsDataloading] = useState(false);
-    // const [isNoData, setIsNoData] = useState(defaultNoDataState);
 
     const { values: { keyword }, handleChange: onKeywordChange, isFormValid, resetForm } = useValidation({
         values: {
@@ -32,9 +31,37 @@ function MoviesPages() {
         isFormValid: true
     });
 
-    const isMovieLiked = useCallback((movie) => savedMovies ?
-        savedMovies.find((savedMovie) => savedMovie.movieId === movie.id) : false, [savedMovies]);
+    const isInitialSavedMoviesSetRef = useRef(false);
 
+    async function getAllMovies() {
+        let movies;
+
+        try {
+            movies = await moviesApi.getMovies();
+        } catch (error) {
+            console.log(responseErrorMessages.serverError);
+        }
+
+        setAllMovies(movies);
+        return movies;
+    };
+
+    async function getSavedMovies() {
+        let movies;
+
+        try {
+            movies = await mainApi.getSavedMovies();
+        } catch (error) {
+            return console.log(responseErrorMessages.serverError);
+        }
+
+        if (movies.length === 0) {
+            setSavedMovies(null);
+        } else {
+            setSavedMovies(movies);
+        };
+
+    };
 
     const getIsNoData = useCallback(() => {
 
@@ -55,28 +82,7 @@ function MoviesPages() {
     }, [selectedMovies, filteredMovies, checkboxes])
 
     const isNoData = getIsNoData();
-
-    const isInitialSavedMoviesSetRef = useRef(false);
-
-    async function getSavedMovies() {
-        let movies;
-
-        try {
-            movies = await mainApi.getSavedMovies();
-        } catch (error) {
-            // setIsNoData({ status: true, message: responseErrorMessages.invalidMoviesData });
-            return console.log(responseErrorMessages.serverError);
-        }
-
-        if (movies.length === 0) {
-            setSavedMovies(null);
-        } else {
-            setSavedMovies(movies);
-        };
-
-        // setIsNoData(defaultNoDataState);
-
-    };
+    const isMovieLiked = useCallback((movie) => savedMovies ? savedMovies.find((savedMovie) => savedMovie.movieId === movie.id) : false, [savedMovies]);
 
     useEffect(() => {
         if (pathname === '/movies' && keyword) {
@@ -98,11 +104,6 @@ function MoviesPages() {
 
             setSelectedMovies(localStorageMovies);
             setCheckboxes(localStorageCheckbox);
-
-            if (localStorageMovies?.length === 0 && localStorageKeyword) {
-                // setIsNoData((prevState) => ({ ...prevState, status: true }));
-            };
-
             isInitialSavedMoviesSetRef.current = false;
             resetForm({
                 keyword: localStorageKeyword
@@ -116,8 +117,6 @@ function MoviesPages() {
 
     }, [pathname]);
 
-
-
     useEffect(() => {
         if (pathname !== '/saved-movies' || savedMovies === null || isInitialSavedMoviesSetRef.current === true) {
             return undefined;
@@ -125,22 +124,6 @@ function MoviesPages() {
         setSelectedMovies(savedMovies);
         isInitialSavedMoviesSetRef.current = true;
     }, [pathname, savedMovies]);
-
-    async function getAllMovies() {
-        let movies;
-
-        try {
-            movies = await moviesApi.getMovies();
-        } catch (error) {
-            // setIsNoData({ status: true, message: responseErrorMessages.invalidMoviesData });
-            console.log(responseErrorMessages.serverError);
-        }
-
-        // setIsNoData(defaultNoDataState)
-        setAllMovies(movies);
-        return movies;
-    };
-
 
     async function handleSearchMovies() {
 
@@ -173,14 +156,12 @@ function MoviesPages() {
         const foundMovies = moviesToSearch.filter(movie => movie.nameRU.toLowerCase().includes(keyword.toLowerCase()));
 
         setSelectedMovies(foundMovies);
-        // setIsNoData((prevState) => ({ ...prevState, status: foundMovies.length === 0 }));
         setIsDataloading(false);
 
         if (pathname === '/movies') {
             localStorage.setItem("keyword", keyword);
             localStorage.setItem("foundMovies", JSON.stringify(foundMovies));
         }
-
     };
 
     const foundMoviesByCheckbox = useMemo(() => {
@@ -190,18 +171,14 @@ function MoviesPages() {
         };
 
         if (!checkboxes["shortMovies-checkbox"]) {
-            // setIsNoData((prevState) => ({ ...prevState, status: selectedMovies.length === 0 }));
             return selectedMovies;
         };
 
         const filteredMovies = selectedMovies.filter((movie) => movie.duration <= 40);
         setFilteredMovies(filteredMovies)
 
-        // setIsNoData((prevState) => ({ ...prevState, status: filteredMovies.length === 0 }));
-
         return filteredMovies;
     }, [selectedMovies, checkboxes, keyword]);
-
 
     async function handleSaveMovie(movie) {
         let savedMovie;

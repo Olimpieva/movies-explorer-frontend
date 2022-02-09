@@ -54,6 +54,7 @@ function Profile({ onLogout, onEditProfile }) {
                                 type="text"
                                 name="name"
                                 minLength="2"
+                                maxLength="30"
                                 required
                                 disabled={!isEdit}
                                 value={name || ''}
@@ -77,6 +78,8 @@ function Profile({ onLogout, onEditProfile }) {
                             <input className="profile__input" id="profile-email"
                                 type="email"
                                 name="email"
+                                minLength="2"
+                                maxLength="30"
                                 pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}"
                                 required
                                 disabled={!isEdit}

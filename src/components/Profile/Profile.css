@@ -71,6 +71,11 @@
     transition: all 0.3s ease-out;
 }
 
+.profile__input:-webkit-autofill,
+.profile__input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+}
+
 .profile__input:focus { 
     outline: 0; 
     outline-offset: 0;

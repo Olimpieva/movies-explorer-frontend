@@ -31,6 +31,11 @@
     color: #8B8B8B;
 }
 
+.search__input:-webkit-autofill,
+.search__input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }
+
 .search__input:focus { 
     outline: 0; 
     outline-offset: 0;

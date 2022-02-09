@@ -62,5 +62,3 @@ export const screenParams = {
         }
     },
 };
-
-export const defaultNoDataState = { status: false, message: 'Ничего не найдено.' }
