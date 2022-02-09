@@ -60,7 +60,7 @@ function MoviesCardList({ movies, onSaveMovie, onRemoveMovie, isMovieLiked, isDa
                             })
                 }
             </ul>
-            {!isShowAllMovies && (counter < movies.length) && <More onClick={moreButtonClick} />}
+            {!isDataLoading && !isShowAllMovies && (counter < movies.length) && <More onClick={moreButtonClick} />}
         </div>
     );
 }
