@@ -1,14 +1,5 @@
-export const mainApiOptions = {
-    baseUrl: 'https://api.search-save-movie.nomoredomains.work',
-};
-
-export const moviesApiOptions = {
-    baseUrl: 'https://api.nomoreparties.co/beatfilm-movies',
-};
-
-export const MAIN_URL = 'http://localhost:3001';
+export const MAIN_URL = 'https://api.search-save-movie.nomoredomains.work';
 export const MOVIES_URL = 'https://api.nomoreparties.co/beatfilm-movies';
-
 
 export const defaultValidationErrorMessages = {
     valueMissing: () => 'Поле должно быть заполнено.',

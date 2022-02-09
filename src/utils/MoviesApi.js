@@ -1,8 +1,8 @@
-import { moviesApiOptions } from "./constans";
+import { MOVIES_URL } from "./constans";
 
 class MoviesApi {
     constructor(options) {
-        this._url = options.baseUrl;
+        this._url = options.url;
     }
 
     async getMovies() {
@@ -21,6 +21,6 @@ class MoviesApi {
     }
 }
 
-const moviesApi = new MoviesApi(moviesApiOptions);
+const moviesApi = new MoviesApi({ url: MOVIES_URL });
 
 export default moviesApi;
