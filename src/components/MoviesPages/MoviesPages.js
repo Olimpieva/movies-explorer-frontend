@@ -70,11 +70,11 @@ function MoviesPages() {
         }
 
         if (selectedMovies.length === 0) {
-            return { status: true, message: 'Ничего не найдено.' }
+            return { status: true, message: responseErrorMessages.noMoviesData }
         }
 
         if (filteredMovies.length === 0 && checkboxes["shortMovies-checkbox"]) {
-            return { status: true, message: 'Ничего не найдено.' }
+            return { status: true, message: responseErrorMessages.noMoviesData }
         }
 
         return { status: false, message: '' }

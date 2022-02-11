@@ -36,7 +36,7 @@ function App() {
 
     } catch (error) {
       setLoggedIn(false);
-      return console.log(error);
+      return console.log(responseErrorMessages.loginUserError);
     }
 
     setCurrentUser(user);
