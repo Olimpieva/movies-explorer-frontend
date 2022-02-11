@@ -84,10 +84,10 @@ function App() {
     } catch (error) {
       let message;
 
-      if (error.status === 500) {
-        message = responseErrorMessages.serverError;
-      } else {
+      if (error.status === 401) {
         message = responseErrorMessages.invalidUserData;
+      } else {
+        message = responseErrorMessages.serverError;
       }
 
       return { error: message };
