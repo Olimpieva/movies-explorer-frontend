@@ -22,6 +22,9 @@ function Register({ onRegister }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        resetForm({ name, email, password }, {}, false);
+
         const result = await onRegister({
             name,
             email,

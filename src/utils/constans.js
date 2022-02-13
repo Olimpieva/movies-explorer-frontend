@@ -17,18 +17,26 @@ export const emailValidationErrorMessages = {
     typeMismatch: () => 'Поле должно содержать корректный адрес.',
 };
 
+export const shortMovieDuration = 40;
+
 export const responseErrorMessages = {
     updateUserError: 'При обновлении профиля произошла ошибка.',
     registerUserError: 'При регистрации пользователя произошла ошибка.',
     loginUserError: 'При авторизации произошла ошибка. Токен не передан или передан не в том формате.',
     invalidTokenData: 'При авторизации произошла ошибка. Переданный токен некорректен.',
     invalidUserData: 'Вы ввели неправильный логин или пароль.',
+    userAlreadyExist: 'Пользователь с таким email уже существует.',
     invalidMoviesData: 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.',
     noMoviesData: 'Ничего не найдено.',
-    userAlreadyExist: 'Пользователь с таким email уже существует.',
-    serverError: 'На сервере произошла ошибка.',
+    saveMovieError: 'Во время сохранения фильма произошла ошибка. Подождите немного и попробуйте ещё раз.',
+    removeMovieError: 'Во время удаления фильма произошла ошибка. Подождите немного и попробуйте ещё раз.',
+    serverError: 'На сервере произошла ошибка. Подождите немного и попробуйте ещё раз.',
     pageNotFound: 'Страница по указанному маршруту не найдена.',
 };
+
+export const noticeMessages = {
+    successEditProfile: 'Профиль успешно отредактирован.',
+}
 
 export const screenParams = {
     desktop: {

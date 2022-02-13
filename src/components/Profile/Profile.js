@@ -6,7 +6,7 @@ import Header from "../Header/Header";
 import FormError from "../FormError/FormError";
 import SubmitButton from "../SubmitButton/SubmitButton";
 import { useValidation } from "../../utils/useValidation";
-import { emailValidationErrorMessages } from "../../utils/constans";
+import { emailValidationErrorMessages, noticeMessages } from "../../utils/constans";
 
 import './Profile.css';
 
@@ -14,8 +14,8 @@ function Profile({ onLogout, onEditProfile }) {
 
     const user = useContext(CurrentUserContext);
     const [isEdit, setIsEdit] = useState(false);
-    const [resError, setResError] = useState('');
-    const { values: { name, email }, handleChange, errors, isFormValid } = useValidation({
+    const [resConfirmation, setResConfirmation] = useState('');
+    const { values: { name, email }, handleChange, errors, isFormValid, resetForm } = useValidation({
         values: {
             name: user.name,
             email: user.email
@@ -27,13 +27,17 @@ function Profile({ onLogout, onEditProfile }) {
     async function onSubmit(event) {
         event.preventDefault();
 
+        resetForm({ name, email }, {}, false);
+
         const result = await onEditProfile({
             name,
             email,
         });
 
         if (result.hasOwnProperty('error')) {
-            setResError(result.error);
+            setResConfirmation(result.error);
+        } else {
+            setResConfirmation(noticeMessages.successEditProfile);
         }
 
         setIsEdit(result.hasOwnProperty('error'))
@@ -59,8 +63,8 @@ function Profile({ onLogout, onEditProfile }) {
                                 disabled={!isEdit}
                                 value={name || ''}
                                 onChange={(event) => {
-                                    setResError('')
-                                    handleChange(event.target)
+                                    setResConfirmation('');
+                                    handleChange(event.target);
                                 }}
                             />
                             <FormError
@@ -85,8 +89,8 @@ function Profile({ onLogout, onEditProfile }) {
                                 disabled={!isEdit}
                                 value={email || ''}
                                 onChange={(event) => {
-                                    setResError('')
-                                    handleChange(event.target)
+                                    setResConfirmation('');
+                                    handleChange(event.target);
                                 }
                                 }
                             />
@@ -104,24 +108,31 @@ function Profile({ onLogout, onEditProfile }) {
                                     <FormError
                                         type="button"
                                         name="submit-profile"
-                                        isHidden={!resError}
-                                        message={resError}
+                                        isHidden={!resConfirmation}
+                                        message={resConfirmation}
                                     />
                                     <SubmitButton text="Сохранить" disabled={!isFormValid || (name === user.name && email === user.email)} />
                                 </>
                                 :
                                 <>
+                                    <FormError
+                                        type="button"
+                                        name="submit-profile"
+                                        isHidden={!resConfirmation}
+                                        message={resConfirmation}
+                                    />
                                     <button className="profile__button profile__button_type_submit"
                                         type="button"
                                         onClick={(e) => {
                                             e.preventDefault();
+                                            setResConfirmation('');
                                             setIsEdit(true)
                                         }}
                                     >
                                         Редактировать
                                     </button>
-                                    <button className="profile__button profile__button_type_logout" type="reset" onClick={onLogout}>Выйти из аккаунта</button>
                                 </>}
+                            <button className="profile__button profile__button_type_logout" type="reset" onClick={onLogout}>Выйти из аккаунта</button>
                         </div>
                     </form>
                 </section>

@@ -22,6 +22,8 @@ function Login({ onLogin }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        resetForm({ email, password }, {}, false);
+
         const result = await onLogin({
             email,
             password
@@ -29,8 +31,6 @@ function Login({ onLogin }) {
 
         if (result.hasOwnProperty('error')) {
             setResError(result.error);
-        } else {
-            resetForm({}, {}, true)
         }
 
     };
@@ -63,6 +63,7 @@ function Login({ onLogin }) {
                     name="password"
                     title="Пароль"
                     minLength="8"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30}"
                     required
                     value={password || ''}
                     onChange={handleChange}

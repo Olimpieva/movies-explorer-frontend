@@ -3,11 +3,12 @@ import { useLocation } from 'react-router-dom';
 
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
+import InfoTooltip from "../InfoTooltip/InfoTooltip"
 
 import mainApi from "../../utils/MainApi";
 import moviesApi from "../../utils/MoviesApi";
 import { useValidation } from '../../utils/useValidation';
-import { responseErrorMessages } from '../../utils/constans';
+import { responseErrorMessages, shortMovieDuration } from '../../utils/constans';
 import { getLocalStorageData, defaultCheckboxValue } from '../../utils/getLocalStorageData';
 
 function MoviesPages() {
@@ -23,6 +24,7 @@ function MoviesPages() {
         getLocalStorageData("checkboxes", defaultCheckboxValue) : defaultCheckboxValue
     );
     const [isDataLoading, setIsDataloading] = useState(false);
+    const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
 
     const { values: { keyword }, handleChange: onKeywordChange, isFormValid, resetForm } = useValidation({
         values: {
@@ -174,7 +176,7 @@ function MoviesPages() {
             return selectedMovies;
         };
 
-        const filteredMovies = selectedMovies.filter((movie) => movie.duration <= 40);
+        const filteredMovies = selectedMovies.filter((movie) => movie.duration <= shortMovieDuration);
         setFilteredMovies(filteredMovies)
 
         return filteredMovies;
@@ -195,7 +197,8 @@ function MoviesPages() {
                 return [...savedMovies, savedMovie];
             });
         } catch (error) {
-            return console.log(responseErrorMessages.serverError);;
+            setIsInfoTooltipOpen(true);
+            return console.log(responseErrorMessages.serverError);
         }
 
         return savedMovie;
@@ -211,41 +214,56 @@ function MoviesPages() {
             };
 
         } catch (error) {
-            console.log(responseErrorMessages.serverError);
+            setIsInfoTooltipOpen(true);
+            return console.log(responseErrorMessages.serverError);
         }
     };
 
     if (pathname === '/movies') {
-        return <Movies
+        return <>
+            <Movies
+                movies={foundMoviesByCheckbox || []}
+                onSearchMovie={handleSearchMovies}
+                onSaveMovie={handleSaveMovie}
+                onRemoveMovie={handleRemoveMovie}
+                keyword={keyword}
+                onKeywordChange={onKeywordChange}
+                checkboxes={checkboxes}
+                onCheckboxChange={setCheckboxes}
+                isFormValid={isFormValid}
+                isMovieLiked={isMovieLiked}
+                isDataLoading={isDataLoading}
+                isNoData={isNoData}
+            />
+            <InfoTooltip
+                isOpen={isInfoTooltipOpen}
+                onClose={() => setIsInfoTooltipOpen(false)}
+                message={responseErrorMessages.saveMovieError}
+            />
+        </>
+    }
+
+    return <>
+        <SavedMovies
+            initialMovies={savedMovies}
             movies={foundMoviesByCheckbox || []}
+            setMovies={setSelectedMovies}
             onSearchMovie={handleSearchMovies}
-            onSaveMovie={handleSaveMovie}
             onRemoveMovie={handleRemoveMovie}
             keyword={keyword}
             onKeywordChange={onKeywordChange}
             checkboxes={checkboxes}
             onCheckboxChange={setCheckboxes}
             isFormValid={isFormValid}
-            isMovieLiked={isMovieLiked}
             isDataLoading={isDataLoading}
             isNoData={isNoData}
         />
-    }
-
-    return <SavedMovies
-        initialMovies={savedMovies}
-        movies={foundMoviesByCheckbox || []}
-        setMovies={setSelectedMovies}
-        onSearchMovie={handleSearchMovies}
-        onRemoveMovie={handleRemoveMovie}
-        keyword={keyword}
-        onKeywordChange={onKeywordChange}
-        checkboxes={checkboxes}
-        onCheckboxChange={setCheckboxes}
-        isFormValid={isFormValid}
-        isDataLoading={isDataLoading}
-        isNoData={isNoData}
-    />
+        <InfoTooltip
+            isOpen={isInfoTooltipOpen}
+            onClose={() => setIsInfoTooltipOpen(false)}
+            message={responseErrorMessages.removeMovieError}
+        />
+    </>
 }
 
 export default MoviesPages;
